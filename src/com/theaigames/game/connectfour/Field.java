@@ -10,6 +10,7 @@ public class Field {
 	private String[][] mBoard;
 	private int mCols = 0, mRows = 0;
 	private String mLastError = "";
+	private int mLastColumn = 0;
 	private final int INAROW = 4; /* Number of cells in a row needed for a win */
 	private String mWinType = "None";
 
@@ -55,6 +56,7 @@ public class Field {
 	 */
 	public Boolean addDisc(int column, String disc) {
 		mLastError = "";
+		mLastColumn = column;
 		if (column < mCols) {
 			for (int y = mRows-1; y >= 0; y--) { // From bottom column up
 				if (mBoard[column][y] == null) {
@@ -76,6 +78,15 @@ public class Field {
 	 */
 	public String getLastError() {
 		return mLastError;
+	}
+	
+	/**
+	 * Returns last inserted column
+	 * @param args : 
+	 * @return : last inserted column
+	 */
+	public int getLastColumn() {
+		return mLastColumn;
 	}
 	
 	

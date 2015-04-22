@@ -19,9 +19,11 @@ package com.theaigames.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import com.theaigames.connections.Filewriter;
+import com.theaigames.connections.JSONWriter;
 //import com.mongodb.BasicDBObject;
 import com.theaigames.engine.Engine;
 import com.theaigames.engine.Logic;
@@ -43,7 +45,7 @@ import com.theaigames.engine.io.IOPlayer;
 
 public abstract class AbstractGame implements Logic {
 
-	private String gameIdString;
+	protected String gameIdString;
 	
 	public Engine engine;
 	public GameHandler processor;
@@ -191,5 +193,14 @@ public abstract class AbstractGame implements Logic {
 		// store everything in the database
 		Database.storeGameInDatabase(savedFilePath, winner.getBot().getIdString(), score, savedFilePath, errors, dumps);
 		*/
+		
+		JSONWriter j = new JSONWriter();
+		Hashtable<String,String> settings = new Hashtable<String, String>();
+		//settings.put("TIMEBANK_MAX", TIMEBANK_MAX);
+		try {
+			j.write(settings, this.processor.getMoves());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

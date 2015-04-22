@@ -1,11 +1,15 @@
 package com.theaigames.game.connectfour;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
+import com.theaigames.connections.Filewriter;
+import com.theaigames.connections.JSONWriter;
 import com.theaigames.engine.io.IOPlayer;
 import com.theaigames.game.AbstractGame;
+import com.theaigames.game.AbstractPlayer;
 import com.theaigames.game.connectfour.Field;
 
 public class Connectfour extends AbstractGame {
@@ -61,5 +65,49 @@ public class Connectfour extends AbstractGame {
 		
 		game.setupEngine(args);
 		game.runEngine();
+	}
+	
+	/**
+	 * Does everything that is needed to store the output of a game
+	 */
+	@Override
+	public void saveGame() {
+		
+		AbstractPlayer winner = this.processor.getWinner();
+		int score = this.processor.getRoundNumber() - 1;
+
+		String gamePath = "game" + this.gameIdString;
+
+		if(winner != null) {
+			System.out.println("winner: " + winner.getName());
+		} else {
+			System.out.println("winner: draw");
+		}
+		
+		System.out.println("Saving the game...");
+		Filewriter f = new Filewriter();
+		for(IOPlayer ioPlayer : this.engine.getPlayers()) {
+			try {
+				f.write (gamePath + "_bot" + ioPlayer.getIdString() + "Errors", ioPlayer.getStderr());
+				f.write (gamePath + "_bot" + ioPlayer.getIdString() + "Dump", ioPlayer.getDump());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		
+		JSONWriter j = new JSONWriter();
+		Hashtable<String,String> settings = new Hashtable<String, String>();
+		settings.put("TIMEBANK_MAX", String.valueOf(TIMEBANK_MAX));
+		settings.put("TIME_PER_MOVE", String.valueOf(TIME_PER_MOVE));
+		settings.put("FIELD_COLUMNS", String.valueOf(FIELD_COLUMNS));
+		settings.put("FIELD_ROWS", String.valueOf(FIELD_ROWS));
+		settings.put("WINNER", winner.getName());
+		
+		try {
+			j.write(settings, this.processor.getMoves());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

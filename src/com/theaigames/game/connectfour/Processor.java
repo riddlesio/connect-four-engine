@@ -50,12 +50,12 @@ public class Processor implements GameHandler {
 		for (Player player : mPlayers) {
 			if (getWinner() == null) {
 				String response = player.requestMove("move");
-				System.out.println("Response from " + player.getName() + ": " + response);
 				Move move = new Move(player);
 				int counter = 0;
+				Boolean moveAdded = false;
 				while (!parseResponse(response, player) && counter < MAX_TRIES) { /* When move is invalid, keep asking for a new move until MAX_TRIES. */
 					move.setIllegalMove(mField.getLastError());
-					
+					move.setColumn(mField.getLastColumn());
 					response = player.requestMove("move");
 					System.out.println("Response from " + player.getName() + ": " + mField.getLastError());
 					counter ++;
@@ -66,14 +66,18 @@ public class Processor implements GameHandler {
 					MoveResult moveResult = new MoveResult(player, mField);
 					moveResult.setIllegalMove(move.getIllegalMove());
 					mMoveResults.add(moveResult);
+					moveAdded = true;
+				}
+				if (!moveAdded) {
+					move.setColumn(mField.getLastColumn());
+					mMoves.add(move);
+					MoveResult moveResult = new MoveResult(player, mField);
+					moveResult.setIllegalMove(move.getIllegalMove());
+					mMoveResults.add(moveResult);
 				}
 				player.sendUpdate("field", player, mField.toString());
 				playerNr++;
 			}
-		}
-		mField.dumpBoard();
-		if (getWinner() != null) {
-			System.out.println("** WINNER: " + mField.getWinType());
 		}
 	}
 	
@@ -117,6 +121,16 @@ public class Processor implements GameHandler {
 	public String getPlayedGame() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * Returns a List of Moves played in this game
+	 * @param args : 
+	 * @return : List with Move objects
+	 */
+	@Override
+	public List<Move> getMoves() {
+		return mMoves;
 	}
 
 }

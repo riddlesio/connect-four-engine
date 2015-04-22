@@ -17,6 +17,10 @@
 
 package com.theaigames.game;
 
+import java.util.List;
+
+import com.theaigames.game.connectfour.Move;
+
 /**
  * GameHandler interface
  * 
@@ -32,4 +36,10 @@ public interface GameHandler {
 	public int getRoundNumber(); // return the current round number
 	public AbstractPlayer getWinner(); // return the winner of the game, null if no winner yet
 	public String getPlayedGame(); // return the complete string of the game that can be parsed by the visualizer.
+	/**
+	 * Returns a List of Moves played in this game
+	 * @param args : 
+	 * @return : List with Move objects
+	 */
+	public List<Move> getMoves();
 }
