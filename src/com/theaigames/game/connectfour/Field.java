@@ -13,6 +13,7 @@ public class Field {
 	private int mLastColumn = 0;
 	private final int INAROW = 4; /* Number of cells in a row needed for a win */
 	private String mWinType = "None";
+	private Disc mWinDisc;
 
 	public Field(int columns, int rows) {
 		mBoard = new String[columns][rows];
@@ -121,7 +122,6 @@ public class Field {
 	 * @return : Returns true when field is full, otherwise returns false.
 	 */
 	public boolean isFull() {
-
 		for (int x = 0; x < mCols; x++)
 		  for (int y = 0; y < mRows; y++)
 		    if (mBoard[x][y] == null)
@@ -153,7 +153,8 @@ public class Field {
 						}
 					}
 					if (win) {
-						mWinType = "Horizontal";
+						mWinType = "horizontal";
+						mWinDisc = new Disc(x, y);
 						return n;
 					}
 				}
@@ -176,7 +177,8 @@ public class Field {
 						}
 					}
 					if (win) {
-						mWinType = "Vertical";
+						mWinType = "vertical";
+						mWinDisc = new Disc(x, y);
 						return n;
 					}
 				}
@@ -199,7 +201,8 @@ public class Field {
 						}
 					}
 					if (win) {
-						mWinType = "Diagonal";
+						mWinType = "diagonal";
+						mWinDisc = new Disc(x, y);
 						return n;
 					}
 				}
@@ -221,7 +224,8 @@ public class Field {
 						}
 					}
 					if (win) {
-						mWinType = "Antidiagonal";
+						mWinType = "antidiagonal";
+						mWinDisc = new Disc(x, y);
 						return n;
 					}
 				}
@@ -238,6 +242,15 @@ public class Field {
 	 */
 	public String getWinType() {
 		return mWinType;
+	}
+	
+	/**
+	 * Returns the direction of a win.
+	 * @param args : 
+	 * @return : Returns String with direction of win, or 'None' if there is no win yet.
+	 */
+	public Disc getWinDisc() {
+		return mWinDisc;
 	}
 
 }

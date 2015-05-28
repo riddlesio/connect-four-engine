@@ -19,6 +19,8 @@ package com.theaigames.game;
 
 import java.util.List;
 
+import com.theaigames.game.connectfour.Disc;
+import com.theaigames.game.connectfour.Field;
 import com.theaigames.game.connectfour.Move;
 
 /**
@@ -42,4 +44,6 @@ public interface GameHandler {
 	 * @return : List with Move objects
 	 */
 	public List<Move> getMoves();
+
+	public Field getField();
 }

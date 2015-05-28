@@ -5,6 +5,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.theaigames.connections.Filewriter;
 import com.theaigames.connections.JSONWriter;
 import com.theaigames.engine.io.IOPlayer;
@@ -103,9 +106,61 @@ public class Connectfour extends AbstractGame {
 		settings.put("FIELD_COLUMNS", String.valueOf(FIELD_COLUMNS));
 		settings.put("FIELD_ROWS", String.valueOf(FIELD_ROWS));
 		settings.put("WINNER", winner.getName());
+		settings.put("PLAYER1NAME", this.engine.getPlayers().get(0).getIdString());
+		settings.put("PLAYER2NAME", this.engine.getPlayers().get(1).getIdString());
+		
+		/* Could be nicer, only used to make the winning discs blink */
+		Disc d = this.processor.getField().getWinDisc();		
+		JSONObject winDiscsJSON = new JSONObject();
+		JSONObject winDiscJSON = new JSONObject();
 		
 		try {
-			j.write(settings, this.processor.getMoves());
+			if (this.processor.getField().getWinType().equals("horizontal")) {
+				winDiscJSON.put("column", d.getColumn()); winDiscJSON.put("row", d.getRow());
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()+1); winDiscJSON.put("row", d.getRow());
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", d.getColumn()+2); winDiscJSON.put("row", d.getRow());
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()+3); winDiscJSON.put("row", d.getRow());
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			} else if (this.processor.getField().getWinType().equals("vertical")) {
+				winDiscJSON.put("column", d.getColumn()); winDiscJSON.put("row", d.getRow());
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()); winDiscJSON.put("row", d.getRow()+1);
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", d.getColumn()); winDiscJSON.put("row", d.getRow()+2);
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()); winDiscJSON.put("row", d.getRow()+3);
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			} else if (this.processor.getField().getWinType().equals("diagonal")) {
+				winDiscJSON.put("column", d.getColumn()); winDiscJSON.put("row", d.getRow());
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()-1); winDiscJSON.put("row", d.getRow()+1);
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", d.getColumn()-2); winDiscJSON.put("row", d.getRow()+2);
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()-3); winDiscJSON.put("row", d.getRow()+3);
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			} else if (this.processor.getField().getWinType().equals("antidiagonal")) {
+				winDiscJSON.put("column", d.getColumn()); winDiscJSON.put("row", d.getRow());
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()+1); winDiscJSON.put("row", d.getRow()+1);
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", d.getColumn()+2); winDiscJSON.put("row", d.getRow()+2);
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", d.getColumn()+3); winDiscJSON.put("row", d.getRow()+3);
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			}
+			JSONObject settingsJSON = new JSONObject();		
+			for (String key : settings.keySet()) {
+				settingsJSON.put(key, settings.get(key));
+			}
+			
+			JSONObject dataJSON = new JSONObject();
+			dataJSON.put("settings", settingsJSON);
+			dataJSON.put("windiscs", winDiscsJSON);
+			j.write(dataJSON, this.processor.getMoves());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

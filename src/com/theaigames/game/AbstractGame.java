@@ -193,14 +193,5 @@ public abstract class AbstractGame implements Logic {
 		// store everything in the database
 		Database.storeGameInDatabase(savedFilePath, winner.getBot().getIdString(), score, savedFilePath, errors, dumps);
 		*/
-		
-		JSONWriter j = new JSONWriter();
-		Hashtable<String,String> settings = new Hashtable<String, String>();
-		//settings.put("TIMEBANK_MAX", TIMEBANK_MAX);
-		try {
-			j.write(settings, this.processor.getMoves());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

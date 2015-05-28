@@ -31,6 +31,7 @@ public class Processor implements GameHandler {
 	private int mRoundNumber = 0;
 	private List<Player> mPlayers;
 	private List<Move> mMoves;
+	private List<Disc> mWinningDiscs;
 	private List<MoveResult> mMoveResults;
 	private Field mField;
 	
@@ -50,17 +51,49 @@ public class Processor implements GameHandler {
 		for (Player player : mPlayers) {
 			if (getWinner() == null) {
 				String response = player.requestMove("move");
-				Move move = new Move(player);
+				
 				int counter = 0;
 				Boolean moveAdded = false;
-				while (!parseResponse(response, player) && counter < MAX_TRIES) { /* When move is invalid, keep asking for a new move until MAX_TRIES. */
+				Move move = new Move(player);
+				if (parseResponse(response, player)) {
+					move = new Move(player);
+					move.setColumn(mField.getLastColumn());
+					mMoves.add(move);
+				} else {
+					move = new Move(player);
+					move.setColumn(mField.getLastColumn());
+					move.setIllegalMove(mField.getLastError());
+					mMoves.add(move);
+					if (parseResponse(response, player)) {
+						move = new Move(player);
+						move.setColumn(mField.getLastColumn());
+						mMoves.add(move);
+					} else {
+						move = new Move(player);
+						move.setColumn(mField.getLastColumn());
+						move.setIllegalMove(mField.getLastError());
+						mMoves.add(move);
+						if (parseResponse(response, player)) {
+							move = new Move(player);
+							move.setColumn(mField.getLastColumn());
+							mMoves.add(move);
+						}
+					}
+				}
+				
+				
+				/*
+				while (!parseResponse(response, player) && counter < MAX_TRIES) { // When move is invalid, keep asking for a new move until MAX_TRIES.
+					Move move = new Move(player);
 					move.setIllegalMove(mField.getLastError());
 					move.setColumn(mField.getLastColumn());
 					response = player.requestMove("move");
-					System.out.println("Response from " + player.getName() + ": " + mField.getLastError());
+					System.out.println("Try " + counter + " Response for " + player.getName() + ": " + mField.getLastError());
 					counter ++;
 					if (counter >= MAX_TRIES) {
 						move.setIllegalMove("Max tries exceeded.");
+						System.out.println("Max tries exceeded.");
+
 					}
 					mMoves.add(move);
 					MoveResult moveResult = new MoveResult(player, mField);
@@ -69,12 +102,14 @@ public class Processor implements GameHandler {
 					moveAdded = true;
 				}
 				if (!moveAdded) {
+					Move move = new Move(player);
 					move.setColumn(mField.getLastColumn());
 					mMoves.add(move);
 					MoveResult moveResult = new MoveResult(player, mField);
 					moveResult.setIllegalMove(move.getIllegalMove());
 					mMoveResults.add(moveResult);
 				}
+				*/
 				player.sendUpdate("field", player, mField.toString());
 				playerNr++;
 			}
@@ -107,6 +142,8 @@ public class Processor implements GameHandler {
 	public AbstractPlayer getWinner() {
 		String winner = mField.getWinnerName();
 		if (winner != null) {
+			mField.dumpBoard();
+			
 			for (Player player : mPlayers) {
 				if (player.getName().equals(winner)) {
 					return player;
@@ -132,5 +169,9 @@ public class Processor implements GameHandler {
 	public List<Move> getMoves() {
 		return mMoves;
 	}
-
+	
+	@Override
+	public Field getField() {
+		return mField;
+	}
 }
