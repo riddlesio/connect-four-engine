@@ -51,6 +51,7 @@ public class Engine {
 
         // Create new process
     	Process process = Runtime.getRuntime().exec(command);
+    	System.out.println(command);
 
         // Attach IO to process
         IOPlayer player = new IOPlayer(process, idString);
@@ -75,7 +76,7 @@ public class Engine {
      * @return : true if the game has ended
      */
     public boolean hasEnded() {
-        return this.logic.isGameWon();
+        return this.logic.isGameOver();
     }
     
     /**

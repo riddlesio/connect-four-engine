@@ -18,12 +18,16 @@
 package com.theaigames.connectfour;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.theaigames.engine.io.IOPlayer;
-import com.theaigames.game.AbstractMove;
-import com.theaigames.game.AbstractPlayer;
+import com.theaigames.game.moves.AbstractMove;
+import com.theaigames.game.player.AbstractPlayer;
 import com.theaigames.game.GameHandler;
 
 public class Processor implements GameHandler {
@@ -47,71 +51,57 @@ public class Processor implements GameHandler {
 	@Override
 	public void playRound(int roundNumber) {
 		mRoundNumber = roundNumber;
-		int playerNr = 1;
 		for (Player player : mPlayers) {
 			if (getWinner() == null) {
 				String response = player.requestMove("move");
 				
-				int counter = 0;
-				Boolean moveAdded = false;
 				Move move = new Move(player);
+				MoveResult moveResult = new MoveResult(player, mField);
 				if (parseResponse(response, player)) {
-					move = new Move(player);
 					move.setColumn(mField.getLastColumn());
 					mMoves.add(move);
+					moveResult = new MoveResult(player, mField);
+					moveResult.setColumn(mField.getLastColumn());
+					mMoveResults.add(moveResult);
 				} else {
 					move = new Move(player);
+					moveResult = new MoveResult(player, mField);
 					move.setColumn(mField.getLastColumn());
 					move.setIllegalMove(mField.getLastError());
 					mMoves.add(move);
+					moveResult = new MoveResult(player, mField);
+					moveResult.setColumn(mField.getLastColumn());
+					mMoveResults.add(moveResult);
 					if (parseResponse(response, player)) {
 						move = new Move(player);
+						moveResult = new MoveResult(player, mField);
 						move.setColumn(mField.getLastColumn());
 						mMoves.add(move);
+						moveResult = new MoveResult(player, mField);
+						moveResult.setColumn(mField.getLastColumn());
+						mMoveResults.add(moveResult);
 					} else {
 						move = new Move(player);
+						moveResult = new MoveResult(player, mField);
 						move.setColumn(mField.getLastColumn());
 						move.setIllegalMove(mField.getLastError());
 						mMoves.add(move);
+						moveResult = new MoveResult(player, mField);
+						moveResult.setColumn(mField.getLastColumn());
+						mMoveResults.add(moveResult);
 						if (parseResponse(response, player)) {
 							move = new Move(player);
+							moveResult = new MoveResult(player, mField);
 							move.setColumn(mField.getLastColumn());
 							mMoves.add(move);
+							moveResult = new MoveResult(player, mField);
+							moveResult.setColumn(mField.getLastColumn());
+							mMoveResults.add(moveResult);
 						}
 					}
 				}
 				
-				
-				/*
-				while (!parseResponse(response, player) && counter < MAX_TRIES) { // When move is invalid, keep asking for a new move until MAX_TRIES.
-					Move move = new Move(player);
-					move.setIllegalMove(mField.getLastError());
-					move.setColumn(mField.getLastColumn());
-					response = player.requestMove("move");
-					System.out.println("Try " + counter + " Response for " + player.getName() + ": " + mField.getLastError());
-					counter ++;
-					if (counter >= MAX_TRIES) {
-						move.setIllegalMove("Max tries exceeded.");
-						System.out.println("Max tries exceeded.");
-
-					}
-					mMoves.add(move);
-					MoveResult moveResult = new MoveResult(player, mField);
-					moveResult.setIllegalMove(move.getIllegalMove());
-					mMoveResults.add(moveResult);
-					moveAdded = true;
-				}
-				if (!moveAdded) {
-					Move move = new Move(player);
-					move.setColumn(mField.getLastColumn());
-					mMoves.add(move);
-					MoveResult moveResult = new MoveResult(player, mField);
-					moveResult.setIllegalMove(move.getIllegalMove());
-					mMoveResults.add(moveResult);
-				}
-				*/
 				player.sendUpdate("field", player, mField.toString());
-				playerNr++;
 			}
 		}
 	}
@@ -126,7 +116,7 @@ public class Processor implements GameHandler {
 
         if (parts[0].equals("place_disc")) {
         	int column = Integer.parseInt(parts[1]);
-        	if (mField.addDisc(column, player.getName())) {
+        	if (mField.addDisc(column, player.getId())) {
         		return true;
         	}
         }
@@ -140,12 +130,11 @@ public class Processor implements GameHandler {
 
 	@Override
 	public AbstractPlayer getWinner() {
-		String winner = mField.getWinnerName();
-		if (winner != null) {
+		int winner = mField.getWinner();
+		if (winner != 0) {
 			mField.dumpBoard();
-			
 			for (Player player : mPlayers) {
-				if (player.getName().equals(winner)) {
+				if (player.getId() == winner) {
 					return player;
 				}
 			}
@@ -156,22 +145,107 @@ public class Processor implements GameHandler {
 
 	@Override
 	public String getPlayedGame() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject output = new JSONObject();
+		AbstractPlayer winner = getWinner();
+		
+		/* Create array of winning discs */
+		Disc winDisc = getField().getWinDisc();
+		String winType = getField().getWinType();
+		JSONObject winDiscsJSON = new JSONObject();
+		JSONObject winDiscJSON = new JSONObject();
+		int winColumn = winDisc.getColumn();
+		int winRow = winDisc.getRow();
+		try {
+			if (winType.equals("horizontal")) {
+				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow);
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn+1); winDiscJSON.put("row", winRow);
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", winColumn+2); winDiscJSON.put("row", winRow);
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn+3); winDiscJSON.put("row", winRow);
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			} else if (winType.equals("vertical")) {
+				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow);
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow+1);
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow+2);
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow+3);
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			} else if (winType.equals("diagonal")) {
+				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow);
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn-1); winDiscJSON.put("row", winRow+1);
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", winColumn-2); winDiscJSON.put("row", winRow+2);
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn-3); winDiscJSON.put("row", winRow+3);
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			} else if (winType.equals("antidiagonal")) {
+				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow);
+				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn+1); winDiscJSON.put("row", winRow+1);
+				winDiscsJSON.put("windisc1", winDiscJSON); winDiscJSON = new JSONObject();				
+				winDiscJSON.put("column", winColumn+2); winDiscJSON.put("row", winRow+2);
+				winDiscsJSON.put("windisc2", winDiscJSON); winDiscJSON = new JSONObject();
+				winDiscJSON.put("column", winColumn+3); winDiscJSON.put("row", winRow+3);
+				winDiscsJSON.put("windisc3", winDiscJSON);
+			}
+			
+			Hashtable<String,String> settings = new Hashtable<String, String>();
+			
+			JSONArray playerNames = new JSONArray();
+			for(Player player : this.mPlayers) {
+				playerNames.put(player.getName());
+			}
+			
+			output.put("settings", new JSONObject()
+			.put("field", new JSONObject()
+					.put("width", String.valueOf(getField().getNrColumns()))
+					.put("height", String.valueOf(getField().getNrRows())))
+			.put("players", new JSONObject()
+					.put("count", this.mPlayers.size()) // could maybe be removed
+					.put("names", playerNames))
+					.put("winnerplayer", winner.getName())
+			);		
+			output.put("windiscs", winDiscsJSON);
+			
+			JSONArray states = new JSONArray();
+			JSONObject state = new JSONObject();
+			int counter = 0;
+			for (MoveResult move : mMoveResults) {
+				state = new JSONObject();
+				state.put("field", move.toString());
+				state.put("move", counter);
+				state.put("column", move.getColumn());
+				states.put(state);
+				counter++;
+			}
+			output.put("states", states);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return output.toString();
 	}
 	
+
 	/**
 	 * Returns a List of Moves played in this game
 	 * @param args : 
 	 * @return : List with Move objects
 	 */
-	@Override
 	public List<Move> getMoves() {
 		return mMoves;
 	}
 	
-	@Override
 	public Field getField() {
 		return mField;
+	}
+
+	@Override
+	public boolean isGameOver() {
+		return (getWinner() != null);
 	}
 }

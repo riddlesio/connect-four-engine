@@ -1,7 +1,7 @@
 package com.theaigames.connectfour;
 
-import com.theaigames.game.AbstractMove;
-import com.theaigames.game.AbstractPlayer;
+import com.theaigames.game.moves.AbstractMove;
+import com.theaigames.game.player.AbstractPlayer;
 
 public class Disc {
 

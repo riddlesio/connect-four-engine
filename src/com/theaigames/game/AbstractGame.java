@@ -19,18 +19,18 @@ package com.theaigames.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
-import com.theaigames.connections.Filewriter;
-import com.theaigames.connections.JSONWriter;
-//import com.mongodb.BasicDBObject;
+import org.bson.types.ObjectId;
+
+import com.mongodb.BasicDBObject;
 import com.theaigames.engine.Engine;
 import com.theaigames.engine.Logic;
 import com.theaigames.engine.io.IOPlayer;
+import com.theaigames.game.player.AbstractPlayer;
 
-//import connections.Amazon;
-//import connections.Database;
+import com.theaigames.connections.Amazon;
+import com.theaigames.connections.Database;
 
 /**
  * abstract class AbstractGame
@@ -45,15 +45,19 @@ import com.theaigames.engine.io.IOPlayer;
 
 public abstract class AbstractGame implements Logic {
 
-	protected String gameIdString;
+	private String gameIdString;
 	
 	public Engine engine;
 	public GameHandler processor;
 	
 	public int maxRounds;
 	
+	public boolean DEV_MODE = !false; // turn this on for local testing
+	public String TEST_BOT; // command for the test bot in DEV_MODE
+	public int NUM_TEST_BOTS; // number of bots for this game
+	
 	public AbstractGame() {
-		maxRounds = 20; // set this later if there is a maximum amount of rounds for this game
+		maxRounds = -1; // set this later if there is a maximum amount of rounds for this game
 	}
 
 	/**
@@ -92,8 +96,8 @@ public abstract class AbstractGame implements Logic {
 //		for(int i=0; i<botIds.size(); i++) {
 //			this.engine.addPlayer("/opt/aigames/scripts/run_bot.sh aiplayer1 " + botDirs.get(i), botIds.get(i));
 //		}
-		this.engine.addPlayer("java -cp /home/joost/workspace/MyBot1/bin/ MyBot", "bot0");
-		this.engine.addPlayer("java -cp /home/joost/workspace/MyBot2/bin/ MyBot", "bot1");
+		this.engine.addPlayer("java -cp /home/joost/workspace/MyBot1/bin/ MyBot", "1");
+		this.engine.addPlayer("java -cp /home/joost/workspace/MyBot2/bin/ MyBot", "2");
 //		this.engine.addPlayer("java -cp /home/joost/workspace/MyBot2/bin/ MyBot", "bot2");
 	}
 	
@@ -106,8 +110,9 @@ public abstract class AbstractGame implements Logic {
 	 * @return : True when the game is over
 	 */
 	@Override
-	public boolean isGameWon() {
-		if (this.processor.getWinner() != null 
+	public boolean isGameOver()
+	{
+		if (this.processor.isGameOver() 
 				|| (this.maxRounds >= 0 && this.processor.getRoundNumber() > this.maxRounds) ) {
         	return true;
         }
@@ -119,9 +124,10 @@ public abstract class AbstractGame implements Logic {
 	 * @param roundNumber : round number
 	 */
 	@Override
-    public void playRound(int roundNumber) {
+    public void playRound(int roundNumber) 
+	{
 		for(IOPlayer ioPlayer : this.engine.getPlayers())
-			ioPlayer.addToDump(String.format("Round %d\n", roundNumber));
+			ioPlayer.addToDump(String.format("Round %d", roundNumber));
 		
 		this.processor.playRound(roundNumber);
 	}
@@ -130,17 +136,22 @@ public abstract class AbstractGame implements Logic {
 	 * close the bot processes, save, exit program
 	 */
 	@Override
-	public void finish() throws Exception {
+	public void finish() throws Exception
+	{
 		// stop the bots
 		for(IOPlayer ioPlayer : this.engine.getPlayers())
 			ioPlayer.finish();
 		Thread.sleep(100);
-
-		// write everything
-		try { 
-			this.saveGame(); 
-		} catch(Exception e) {
-			e.printStackTrace();
+		
+		if(DEV_MODE) { // print the game file when in DEV_MODE
+			String playedGame = this.processor.getPlayedGame();
+			System.out.println(playedGame);
+		} else { // save the game to database
+			try {
+				this.saveGame();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		System.out.println("Done.");
@@ -154,44 +165,35 @@ public abstract class AbstractGame implements Logic {
 	public void saveGame() {
 		
 		AbstractPlayer winner = this.processor.getWinner();
+		ObjectId winnerId = null;
 		int score = this.processor.getRoundNumber() - 1;
-		
-		/*
 		BasicDBObject errors = new BasicDBObject();
 		BasicDBObject dumps = new BasicDBObject();
-		*/
-		String gamePath = "game" + this.gameIdString;
+		String gamePath = "games/" + this.gameIdString;
 
 		if(winner != null) {
 			System.out.println("winner: " + winner.getName());
+			winnerId = new ObjectId(winner.getBot().getIdString());
 		} else {
 			System.out.println("winner: draw");
 		}
 		
 		System.out.println("Saving the game...");
-		Filewriter f = new Filewriter();
-		for(IOPlayer ioPlayer : this.engine.getPlayers()) {
-			try {
-				f.write (gamePath + "_bot" + ioPlayer.getIdString() + "Errors", ioPlayer.getStderr());
-				f.write (gamePath + "_bot" + ioPlayer.getIdString() + "Dump", ioPlayer.getDump());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		
-		/*
 		// save the visualization file to amazon
+		Amazon.connectToAmazon();
 		String savedFilePath = Amazon.saveToAmazon(this.processor.getPlayedGame(), gamePath + "/visualization");
 		
-		
 		// save errors and dumps to amazon and create object for database
+		int botNr = 0;
 		for(IOPlayer ioPlayer : this.engine.getPlayers()) {
-			errors.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getStderr(), gamePath + "/bot1Errors"));
-			dumps.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getDump(), gamePath + "/bot1Dump"));
+			botNr++;
+			errors.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getStderr(), String.format("%s/bot%dErrors", gamePath, botNr)));
+			dumps.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getDump(), String.format("%s/bot%dDump", gamePath, botNr)));
 		}
 		
 		// store everything in the database
-		Database.storeGameInDatabase(savedFilePath, winner.getBot().getIdString(), score, savedFilePath, errors, dumps);
-		*/
+		Database.connectToDatabase();
+		Database.storeGameInDatabase(this.gameIdString, winnerId, score, savedFilePath, errors, dumps);
 	}
 }

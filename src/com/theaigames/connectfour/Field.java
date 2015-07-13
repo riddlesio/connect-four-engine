@@ -3,11 +3,11 @@ package com.theaigames.connectfour;
 import java.io.IOException;
 
 import com.theaigames.engine.io.IOPlayer;
-import com.theaigames.game.AbstractPlayer;
+import com.theaigames.game.player.AbstractPlayer;
 
 public class Field {
 	
-	private String[][] mBoard;
+	private int[][] mBoard;
 	private int mCols = 0, mRows = 0;
 	private String mLastError = "";
 	private int mLastColumn = 0;
@@ -16,7 +16,7 @@ public class Field {
 	private Disc mWinDisc;
 
 	public Field(int columns, int rows) {
-		mBoard = new String[columns][rows];
+		mBoard = new int[columns][rows];
 		mCols = columns;
 		mRows = rows;
 		clearBoard();
@@ -25,7 +25,7 @@ public class Field {
 	public void clearBoard() {
 		for (int x = 0; x < mCols; x++) {
 			for (int y = 0; y < mRows; y++) {
-				mBoard[x][y] = null;
+				mBoard[x][y] = 0;
 			}
 		}
 	}
@@ -37,7 +37,7 @@ public class Field {
 		System.out.print("\n");
 		for (int y = 0; y < mRows; y++) {
 			for (int x = 0; x < mCols; x++) {
-				System.out.print(padRight(mBoard[x][y], 8));
+				System.out.print(mBoard[x][y]);
 				if (x < mCols-1) {
 					System.out.print(",");
 				}
@@ -55,12 +55,12 @@ public class Field {
 	 * @param args : command line arguments passed on running of application
 	 * @return : true if disc fits, otherwise false
 	 */
-	public Boolean addDisc(int column, String disc) {
+	public Boolean addDisc(int column, int disc) {
 		mLastError = "";
 		mLastColumn = column;
 		if (column < mCols) {
 			for (int y = mRows-1; y >= 0; y--) { // From bottom column up
-				if (mBoard[column][y] == null) {
+				if (mBoard[column][y] == 0) {
 					mBoard[column][y] = disc;
 					return true;
 				}
@@ -105,11 +105,7 @@ public class Field {
 				if (counter > 0) {
 					r += ",";
 				}
-				if (mBoard[x][y] == null) {
-					r += "empty";
-				} else {
-					r += mBoard[x][y];
-				}
+				r += mBoard[x][y];
 				counter++;
 			}
 		}
@@ -124,7 +120,7 @@ public class Field {
 	public boolean isFull() {
 		for (int x = 0; x < mCols; x++)
 		  for (int y = 0; y < mRows; y++)
-		    if (mBoard[x][y] == null)
+		    if (mBoard[x][y] == 0)
 		      return false; // At least one cell is not filled
 
 		// All cells are filled
@@ -132,20 +128,20 @@ public class Field {
 	}
 	
 	/**
-	 * Checks if there is a winner, if so, returns player name.
+	 * Checks if there is a winner, if so, returns player id.
 	 * @param args : 
-	 * @return : Returns player name if there is a winner, otherwise returns null.
+	 * @return : Returns player id if there is a winner, otherwise returns 0.
 	 */
-	public String getWinnerName() {
+	public int getWinner() {
 		/* Check for horizontal wins */
 		for (int x = 0; x < mCols; x++) {
 			for (int y = 0; y < mRows; y++) {
-				String n = mBoard[x][y];
+				int n = mBoard[x][y];
 				Boolean win = true;
-				if (n != null) {
+				if (n != 0) {
 					for (int i = 0; i < INAROW; i++) {
 						if (x + i < mCols) {
-							if (!n.equals(mBoard[x + i][y])) {
+							if (n != (mBoard[x + i][y])) {
 								win = false;
 							}
 						} else {
@@ -164,12 +160,12 @@ public class Field {
 		/* Check for vertical wins */
 		for (int x = 0; x < mCols; x++) {
 			for (int y = 0; y < mRows; y++) {
-				String n = mBoard[x][y];
+				int n = mBoard[x][y];
 				Boolean win = true;
-				if (n != null) {
+				if (n != 0) {
 					for (int i = 0; i < INAROW; i++) {
 						if (y + i < mRows) {
-							if (!n.equals(mBoard[x][y + i])) {
+							if (n != mBoard[x][y + i]) {
 								win = false;
 							}
 						} else {
@@ -188,12 +184,12 @@ public class Field {
 		/* Check for diagonal wins */
 		for (int x = 0; x < mCols; x++) {
 			for (int y = 0; y < mRows; y++) {
-				String n = mBoard[x][y];
+				int n = mBoard[x][y];
 				Boolean win = true;
-				if (n != null) {
+				if (n != 0) {
 					for (int i = 0; i < INAROW; i++) {
 						if (x - i >= 0 && y + i < mRows) {
-							if (!n.equals(mBoard[x - i][y + i])) {
+							if (n !=mBoard[x - i][y + i]) {
 								win = false;
 							}
 						} else {
@@ -211,12 +207,12 @@ public class Field {
 		/* Check for anti diagonal wins */
 		for (int x = 0; x < mCols; x++) {
 			for (int y = 0; y < mRows; y++) {
-				String n = mBoard[x][y];
+				int n = mBoard[x][y];
 				Boolean win = true;
-				if (n != null) {
+				if (n != 0) {
 					for (int i = 0; i < INAROW; i++) {
 						if (x + i < mCols && y + i < mRows) {
-							if (!n.equals(mBoard[x + i][y + i])) {
+							if (n != mBoard[x + i][y + i]) {
 								win = false;
 							}
 						} else {
@@ -231,7 +227,7 @@ public class Field {
 				}
 			}
 		}
-		return null;
+		return 0;
 	}
 	
 	
@@ -253,4 +249,11 @@ public class Field {
 		return mWinDisc;
 	}
 
+	public int getNrColumns() {
+		return mCols;
+	}
+	
+	public int getNrRows() {
+		return mRows;
+	}
 }

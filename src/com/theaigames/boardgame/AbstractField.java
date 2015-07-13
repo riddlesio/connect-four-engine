@@ -1,6 +1,6 @@
 package com.theaigames.boardgame;
 
-import com.theaigames.game.AbstractPlayer;
+import com.theaigames.game.player.AbstractPlayer;
 
 
 /**
