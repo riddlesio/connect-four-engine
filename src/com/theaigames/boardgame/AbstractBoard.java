@@ -2,7 +2,6 @@ package com.theaigames.boardgame;
 
 import java.io.IOException;
 
-import com.theaigames.game.AbstractField;
 
 
 /**
