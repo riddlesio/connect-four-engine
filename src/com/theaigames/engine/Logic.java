@@ -17,8 +17,8 @@
 
 package com.theaigames.engine;
 
+import com.theaigames.connectfour.Player;
 import com.theaigames.engine.io.IOPlayer;
-import com.theaigames.game.connectfour.Player;
 
 import java.util.ArrayList;
 

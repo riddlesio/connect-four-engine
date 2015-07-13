@@ -19,9 +19,9 @@ package com.theaigames.game;
 
 import java.util.List;
 
-import com.theaigames.game.connectfour.Disc;
-import com.theaigames.game.connectfour.Field;
-import com.theaigames.game.connectfour.Move;
+import com.theaigames.connectfour.Disc;
+import com.theaigames.connectfour.Field;
+import com.theaigames.connectfour.Move;
 
 /**
  * GameHandler interface

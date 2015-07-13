@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Properties;
 import org.json.JSONObject; 
 
+import com.theaigames.connectfour.Move;
 import com.theaigames.game.AbstractPlayer;
-import com.theaigames.game.connectfour.Move;
 
 /**
 * JSONWriter class
