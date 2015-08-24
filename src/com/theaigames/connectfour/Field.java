@@ -122,7 +122,6 @@ public class Field {
 		  for (int y = 0; y < mRows; y++)
 		    if (mBoard[x][y] == 0)
 		      return false; // At least one cell is not filled
-
 		// All cells are filled
 		return true;
 	}

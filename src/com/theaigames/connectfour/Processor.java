@@ -38,8 +38,6 @@ public class Processor implements GameHandler {
 	private List<Disc> mWinningDiscs;
 	private List<MoveResult> mMoveResults;
 	private Field mField;
-	
-	private final int MAX_TRIES = 3;
 
 	public Processor(List<Player> players, Field field) {
 		mPlayers = players;
@@ -54,54 +52,58 @@ public class Processor implements GameHandler {
 		for (Player player : mPlayers) {
 			if (getWinner() == null) {
 				String response = player.requestMove("move");
-				
 				Move move = new Move(player);
-				MoveResult moveResult = new MoveResult(player, mField);
+				MoveResult moveResult = new MoveResult(player, mField, player.getId());
 				if (parseResponse(response, player)) {
-					move.setColumn(mField.getLastColumn());
-					mMoves.add(move);
-					moveResult = new MoveResult(player, mField);
-					moveResult.setColumn(mField.getLastColumn());
-					mMoveResults.add(moveResult);
-				} else {
-					move = new Move(player);
-					moveResult = new MoveResult(player, mField);
 					move.setColumn(mField.getLastColumn());
 					move.setIllegalMove(mField.getLastError());
 					mMoves.add(move);
-					moveResult = new MoveResult(player, mField);
+					moveResult = new MoveResult(player, mField, player.getId());
 					moveResult.setColumn(mField.getLastColumn());
+					moveResult.setIllegalMove(mField.getLastError());
+					mMoveResults.add(moveResult);
+				} else {
+					move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
+					move.setColumn(mField.getLastColumn());
+					move.setIllegalMove(mField.getLastError() + " (first try)");
+					mMoves.add(move);
+					moveResult.setColumn(mField.getLastColumn());
+					moveResult.setIllegalMove(mField.getLastError() + " (first try)");
 					mMoveResults.add(moveResult);
 					if (parseResponse(response, player)) {
-						move = new Move(player);
-						moveResult = new MoveResult(player, mField);
+						move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
 						move.setColumn(mField.getLastColumn());
 						mMoves.add(move);
-						moveResult = new MoveResult(player, mField);
 						moveResult.setColumn(mField.getLastColumn());
 						mMoveResults.add(moveResult);
 					} else {
-						move = new Move(player);
-						moveResult = new MoveResult(player, mField);
+						move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
 						move.setColumn(mField.getLastColumn());
-						move.setIllegalMove(mField.getLastError());
+						move.setIllegalMove(mField.getLastError() + " (second try)");
 						mMoves.add(move);
-						moveResult = new MoveResult(player, mField);
 						moveResult.setColumn(mField.getLastColumn());
+						moveResult.setIllegalMove(mField.getLastError() + " (second try)");
 						mMoveResults.add(moveResult);
 						if (parseResponse(response, player)) {
-							move = new Move(player);
-							moveResult = new MoveResult(player, mField);
+							move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
 							move.setColumn(mField.getLastColumn());
-							mMoves.add(move);
-							moveResult = new MoveResult(player, mField);
+							mMoves.add(move);							
 							moveResult.setColumn(mField.getLastColumn());
+							mMoveResults.add(moveResult);
+						} else {
+							move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
+							move.setColumn(mField.getLastColumn());
+							move.setIllegalMove(mField.getLastError() + " (last try)");
+							mMoves.add(move);
+							moveResult.setColumn(mField.getLastColumn());
+							moveResult.setIllegalMove(mField.getLastError() + " (last try)");
 							mMoveResults.add(moveResult);
 						}
 					}
 				}
 				
 				player.sendUpdate("field", player, mField.toString());
+				mField.dumpBoard();
 			}
 		}
 	}
@@ -113,9 +115,10 @@ public class Processor implements GameHandler {
 	 */
 	private Boolean parseResponse(String r, Player player) {
 		String[] parts = r.split(" ");
-
+		System.out.println("r " + r);
         if (parts[0].equals("place_disc")) {
         	int column = Integer.parseInt(parts[1]);
+        	
         	if (mField.addDisc(column, player.getId())) {
         		return true;
         	}
@@ -132,7 +135,6 @@ public class Processor implements GameHandler {
 	public AbstractPlayer getWinner() {
 		int winner = mField.getWinner();
 		if (winner != 0) {
-			mField.dumpBoard();
 			for (Player player : mPlayers) {
 				if (player.getId() == winner) {
 					return player;
@@ -151,11 +153,13 @@ public class Processor implements GameHandler {
 		/* Create array of winning discs */
 		Disc winDisc = getField().getWinDisc();
 		String winType = getField().getWinType();
+		
 		JSONObject winDiscsJSON = new JSONObject();
 		JSONObject winDiscJSON = new JSONObject();
 		int winColumn = winDisc.getColumn();
 		int winRow = winDisc.getRow();
 		try {
+			/*
 			if (winType.equals("horizontal")) {
 				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow);
 				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();
@@ -193,6 +197,7 @@ public class Processor implements GameHandler {
 				winDiscJSON.put("column", winColumn+3); winDiscJSON.put("row", winRow+3);
 				winDiscsJSON.put("windisc3", winDiscJSON);
 			}
+			*/
 			
 			Hashtable<String,String> settings = new Hashtable<String, String>();
 			
@@ -210,16 +215,23 @@ public class Processor implements GameHandler {
 					.put("names", playerNames))
 					.put("winnerplayer", winner.getName())
 			);		
-			output.put("windiscs", winDiscsJSON);
+			//output.put("windiscs", winDiscsJSON);
 			
 			JSONArray states = new JSONArray();
 			JSONObject state = new JSONObject();
 			int counter = 0;
+			String winnerstring = "";
 			for (MoveResult move : mMoveResults) {
+				if (counter == mMoveResults.size()-1) {
+					winnerstring = winner.getName();
+				}
 				state = new JSONObject();
 				state.put("field", move.toString());
-				state.put("move", counter);
+				state.put("round", counter);
 				state.put("column", move.getColumn());
+				state.put("winner", winnerstring);
+				state.put("player", move.getPlayerId());
+				state.put("illegalMove", move.getIllegalMove());
 				states.put(state);
 				counter++;
 			}
@@ -246,6 +258,6 @@ public class Processor implements GameHandler {
 
 	@Override
 	public boolean isGameOver() {
-		return (getWinner() != null);
+		return (getWinner() != null || mField.isFull());
 	}
 }
