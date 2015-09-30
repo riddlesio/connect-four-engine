@@ -38,6 +38,7 @@ public class Processor implements GameHandler {
 	private List<Disc> mWinningDiscs;
 	private List<MoveResult> mMoveResults;
 	private Field mField;
+	private int mGameOverByPlayerErrorPlayerId = 0;
 
 	public Processor(List<Player> players, Field field) {
 		mPlayers = players;
@@ -70,6 +71,8 @@ public class Processor implements GameHandler {
 					moveResult.setColumn(mField.getLastColumn());
 					moveResult.setIllegalMove(mField.getLastError() + " (first try)");
 					mMoveResults.add(moveResult);
+					player.sendUpdate("field", mField.toString());
+					response = player.requestMove("move");
 					if (parseResponse(response, player)) {
 						move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
 						move.setColumn(mField.getLastColumn());
@@ -84,13 +87,15 @@ public class Processor implements GameHandler {
 						moveResult.setColumn(mField.getLastColumn());
 						moveResult.setIllegalMove(mField.getLastError() + " (second try)");
 						mMoveResults.add(moveResult);
+						player.sendUpdate("field", mField.toString());
+						response = player.requestMove("move");
 						if (parseResponse(response, player)) {
 							move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
 							move.setColumn(mField.getLastColumn());
 							mMoves.add(move);							
 							moveResult.setColumn(mField.getLastColumn());
 							mMoveResults.add(moveResult);
-						} else {
+						} else { /* Too many errors, other player wins */
 							move = new Move(player); moveResult = new MoveResult(player, mField, player.getId());
 							move.setColumn(mField.getLastColumn());
 							move.setIllegalMove(mField.getLastError() + " (last try)");
@@ -98,6 +103,7 @@ public class Processor implements GameHandler {
 							moveResult.setColumn(mField.getLastColumn());
 							moveResult.setIllegalMove(mField.getLastError() + " (last try)");
 							mMoveResults.add(moveResult);
+							mGameOverByPlayerErrorPlayerId = player.getId();
 						}
 					}
 				}
@@ -134,13 +140,19 @@ public class Processor implements GameHandler {
 	@Override
 	public AbstractPlayer getWinner() {
 		int winner = mField.getWinner();
+		if (mGameOverByPlayerErrorPlayerId > 0) { /* Game over due to too many player errors. Look up the other player, which became the winner */
+			for (Player player : mPlayers) {
+				if (player.getId() != mGameOverByPlayerErrorPlayerId) {
+					return player;
+				}
+			}
+		}
 		if (winner != 0) {
 			for (Player player : mPlayers) {
 				if (player.getId() == winner) {
 					return player;
 				}
 			}
-
 		}
 		return null;
 	}
@@ -156,10 +168,10 @@ public class Processor implements GameHandler {
 		
 		JSONObject winDiscsJSON = new JSONObject();
 		JSONObject winDiscJSON = new JSONObject();
-		int winColumn = winDisc.getColumn();
-		int winRow = winDisc.getRow();
 		try {
 			/*
+			int winColumn = winDisc.getColumn();
+			int winRow = winDisc.getRow();
 			if (winType.equals("horizontal")) {
 				winDiscJSON.put("column", winColumn); winDiscJSON.put("row", winRow);
 				winDiscsJSON.put("windisc0", winDiscJSON); winDiscJSON = new JSONObject();

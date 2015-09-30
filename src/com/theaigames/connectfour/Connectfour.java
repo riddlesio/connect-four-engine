@@ -38,14 +38,14 @@ public class Connectfour extends AbstractGame {
 
 		}
 		for(Player player : this.players) {
-			sendSettings1(player);
+			sendSettings(player);
 		}
 		
 		// create the processor
 		super.processor = new Processor(this.players, this.mField);
 	}
 
-	public void sendSettings1(Player player) {
+	public void sendSettings(Player player) {
 		player.sendSetting("timebank", TIMEBANK_MAX);
 		player.sendSetting("time_per_move", TIME_PER_MOVE);
 		player.sendSetting("field_columns", FIELD_COLUMNS);

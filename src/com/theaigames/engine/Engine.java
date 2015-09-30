@@ -119,7 +119,7 @@ public class Engine {
                 try {
                 	this.logic.finish();
                 } catch (Exception ex) {
-                    System.out.println(ex);
+                	ex.printStackTrace();
                 }
             }
         }
