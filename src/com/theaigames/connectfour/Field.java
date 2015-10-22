@@ -102,10 +102,14 @@ public class Field {
 		int counter = 0;
 		for (int y = 0; y < mRows; y++) {
 			for (int x = 0; x < mCols; x++) {
-				if (counter > 0) {
-					r += ",";
-				}
 				r += mBoard[x][y];
+				if (counter < mRows*mCols-1) {
+					if (x == mCols-1) {
+						r += ";";
+					} else {
+						r += ",";
+					}
+				}
 				counter++;
 			}
 		}

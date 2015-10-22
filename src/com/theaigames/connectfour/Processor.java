@@ -51,6 +51,7 @@ public class Processor implements GameHandler {
 	public void playRound(int roundNumber) {
 		mRoundNumber = roundNumber;
 		for (Player player : mPlayers) {
+			player.sendUpdate("field", mField.toString());
 			if (getWinner() == null) {
 				String response = player.requestMove("move");
 				Move move = new Move(player);
@@ -108,7 +109,7 @@ public class Processor implements GameHandler {
 					}
 				}
 				
-				player.sendUpdate("field", player, mField.toString());
+				player.sendUpdate("field", mField.toString());
 				mField.dumpBoard();
 			}
 		}
