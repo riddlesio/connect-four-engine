@@ -55,7 +55,8 @@ public class Engine {
 
         // Attach IO to process
         IOPlayer player = new IOPlayer(process, idString);
-        
+		System.out.println(idString);
+
         // Add player
         this.players.add(player);
 
