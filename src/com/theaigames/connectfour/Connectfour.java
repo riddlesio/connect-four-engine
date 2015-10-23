@@ -53,8 +53,6 @@ public class Connectfour extends AbstractGame {
 		player.sendSetting("your_bot", player.getName());
 		player.sendSetting("field_columns", FIELD_COLUMNS);
 		player.sendSetting("field_rows", FIELD_ROWS);
-		player.sendSetting("bot_id", player.getId());
-
 	}
 
 	@Override
