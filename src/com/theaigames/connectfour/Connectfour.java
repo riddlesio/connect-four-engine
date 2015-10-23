@@ -37,7 +37,7 @@ public class Connectfour extends AbstractGame {
 			this.players.add(player);
 
 		}
-		for(Player player : this.players) {
+		for(AbstractPlayer player : this.players) {
 			sendSettings(player);
 		}
 		
@@ -46,7 +46,7 @@ public class Connectfour extends AbstractGame {
 	}
 
 	@Override
-	public void sendSettings(Player player) {
+	public void sendSettings(AbstractPlayer player) {
 		player.sendSetting("timebank", TIMEBANK_MAX);
 		player.sendSetting("time_per_move", TIME_PER_MOVE);
 		player.sendSetting("player_names", this.players.get(0).getName() + "," + this.players.get(1).getName());
@@ -65,8 +65,6 @@ public class Connectfour extends AbstractGame {
 	
 	public static void main(String args[]) throws Exception {
 		Connectfour game = new Connectfour();
-
-		game.DEV_MODE = false;
 		
 		game.setupEngine(args);
 		game.runEngine();
