@@ -32,7 +32,7 @@ public class Connectfour extends AbstractGame {
 		
 		for(int i=0; i<ioPlayers.size(); i++) {
 			// create the player
-			String playerName = ioPlayers.get(i).getIdString();
+			String playerName = String.format("player%d", i+1);
 			Player player = new Player(playerName, ioPlayers.get(i), TIMEBANK_MAX, TIME_PER_MOVE, i+1);
 			this.players.add(player);
 
