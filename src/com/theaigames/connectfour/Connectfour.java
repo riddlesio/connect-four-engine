@@ -45,6 +45,7 @@ public class Connectfour extends AbstractGame {
 		super.processor = new Processor(this.players, this.mField);
 	}
 
+	@Override
 	public void sendSettings(Player player) {
 		player.sendSetting("timebank", TIMEBANK_MAX);
 		player.sendSetting("time_per_move", TIME_PER_MOVE);
@@ -64,14 +65,10 @@ public class Connectfour extends AbstractGame {
 	
 	public static void main(String args[]) throws Exception {
 		Connectfour game = new Connectfour();
+
+		game.DEV_MODE = false;
 		
 		game.setupEngine(args);
 		game.runEngine();
-	}
-
-	@Override
-	public void sendSettings(AbstractPlayer player) {
-		// TODO Auto-generated method stub
-		
 	}
 }
