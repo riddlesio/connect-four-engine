@@ -49,7 +49,11 @@ public class Connectfour extends AbstractGame {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public void sendSettings(AbstractPlayer player) {
+=======
+	public void sendSettings(Player player) {
+>>>>>>> 10f3199... changes to get it working on theaigames
 		player.sendSetting("timebank", TIMEBANK_MAX);
 		player.sendSetting("time_per_move", TIME_PER_MOVE);
 		player.sendSetting("player_names", this.players.get(0).getName() + "," + this.players.get(1).getName());
@@ -68,6 +72,8 @@ public class Connectfour extends AbstractGame {
 	
 	public static void main(String args[]) throws Exception {
 		Connectfour game = new Connectfour();
+
+		game.DEV_MODE = false;
 		
 		game.setupEngine(args);
 		game.runEngine();
