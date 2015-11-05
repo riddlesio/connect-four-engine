@@ -45,6 +45,12 @@ public class Processor implements GameHandler {
 		mField = field;
 		mMoves = new ArrayList<Move>();
 		mMoveResults = new ArrayList<MoveResult>();
+		
+		/* Create first move with empty field */
+		Move move = new Move(mPlayers.get(0));
+		MoveResult moveResult = new MoveResult(mPlayers.get(0), mField, mPlayers.get(0).getId());
+		mMoves.add(move);
+		mMoveResults.add(moveResult);
 	}
 
 	@Override
@@ -217,6 +223,10 @@ public class Processor implements GameHandler {
 			for(Player player : this.mPlayers) {
 				playerNames.put(player.getName());
 			}
+			String winnerplayer = winner.getName();
+			if (mField.isFull()) { /* The board is full, no winner. */
+				winnerplayer = "none";
+			}
 			
 			output.put("settings", new JSONObject()
 			.put("field", new JSONObject()
@@ -225,7 +235,7 @@ public class Processor implements GameHandler {
 			.put("players", new JSONObject()
 					.put("count", this.mPlayers.size()) // could maybe be removed
 					.put("names", playerNames))
-					.put("winnerplayer", winner.getName())
+					.put("winnerplayer", winnerplayer)
 			);		
 			//output.put("windiscs", winDiscsJSON);
 			
@@ -235,7 +245,7 @@ public class Processor implements GameHandler {
 			String winnerstring = "";
 			for (MoveResult move : mMoveResults) {
 				if (counter == mMoveResults.size()-1) {
-					winnerstring = winner.getName();
+					winnerstring = winnerplayer;
 				}
 				state = new JSONObject();
 				state.put("field", move.toString());

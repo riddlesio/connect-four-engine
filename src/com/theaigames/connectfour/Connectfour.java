@@ -21,6 +21,7 @@ public class Connectfour extends AbstractGame {
 	private final int FIELD_ROWS = 6;	
 	private List<Player> players;
 	private Field mField;
+	private int mBotId = 1;
 
 	@Override
 	public void setupGame(ArrayList<IOPlayer> ioPlayers) throws Exception {			
@@ -37,8 +38,10 @@ public class Connectfour extends AbstractGame {
 			this.players.add(player);
 
 		}
+		
 		for(AbstractPlayer player : this.players) {
 			sendSettings(player);
+			
 		}
 		
 		// create the processor
@@ -51,8 +54,10 @@ public class Connectfour extends AbstractGame {
 		player.sendSetting("time_per_move", TIME_PER_MOVE);
 		player.sendSetting("player_names", this.players.get(0).getName() + "," + this.players.get(1).getName());
 		player.sendSetting("your_bot", player.getName());
+		player.sendSetting("your_botid",mBotId);
 		player.sendSetting("field_columns", FIELD_COLUMNS);
 		player.sendSetting("field_rows", FIELD_ROWS);
+		mBotId++;
 	}
 
 	@Override

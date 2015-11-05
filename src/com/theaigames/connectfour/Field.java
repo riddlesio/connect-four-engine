@@ -65,9 +65,9 @@ public class Field {
 					return true;
 				}
 			}
-			mLastError = "Column is full.";
+			mLastError = "Column " + column + " is full.";
 		} else {
-			mLastError = "Move out of bounds.";
+			mLastError = "Move out of bounds. (" + column + ")";
 		}
 		return false;
 	}

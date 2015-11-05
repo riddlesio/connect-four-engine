@@ -69,6 +69,7 @@ public class IOPlayer implements Runnable {
                 System.err.println("Writing to bot failed");
             }
             addToDump(line);
+            System.out.println(line);
         }
     }
     
