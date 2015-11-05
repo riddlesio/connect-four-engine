@@ -11,7 +11,7 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//	
+//  
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
@@ -32,50 +32,50 @@ import com.theaigames.game.player.AbstractPlayer;
  */
 
 public abstract class AbstractMove {
-	
-	private AbstractPlayer player; //player that did this move
-	private String illegalMove; //gets the value of the error message if move is illegal, else remains empty
-	
-	public AbstractMove(AbstractPlayer player) {
-		this.player = player;
-		this.illegalMove = "";
-	}
-	
-	/**
-	 * @param player : Sets the name of the Player that this Move belongs to
-	 */
-	public void setPlayer(AbstractPlayer player) {
-		this.player = player;
-	}
-	
-	/**
-	 * @param illegalMove : Sets the error message of this move. Only set this if the Move is illegal.
-	 */
-	public void setIllegalMove(String illegalMove) {
-		this.illegalMove = illegalMove;
-	}
-	
-	/**
-	 * @return : The player that this Move belongs to
-	 */
-	public AbstractPlayer getPlayer() {
-		return this.player;
-	}
-	
-	/**
-	 * @return : True if this Move is illegal
-	 */
-	public boolean isIllegal() {
-		if(this.illegalMove.isEmpty())
-			return false;
-		return true;
-	}
-	
-	/**
-	 * @return : The error message of this Move
-	 */
-	public String getIllegalMove() {
-		return illegalMove;
-	}
+    
+    private AbstractPlayer player; //player that did this move
+    private String illegalMove; //gets the value of the error message if move is illegal, else remains empty
+    
+    public AbstractMove(AbstractPlayer player) {
+        this.player = player;
+        this.illegalMove = "";
+    }
+    
+    /**
+     * @param player : Sets the name of the Player that this Move belongs to
+     */
+    public void setPlayer(AbstractPlayer player) {
+        this.player = player;
+    }
+    
+    /**
+     * @param illegalMove : Sets the error message of this move. Only set this if the Move is illegal.
+     */
+    public void setIllegalMove(String illegalMove) {
+        this.illegalMove = illegalMove;
+    }
+    
+    /**
+     * @return : The player that this Move belongs to
+     */
+    public AbstractPlayer getPlayer() {
+        return this.player;
+    }
+    
+    /**
+     * @return : True if this Move is illegal
+     */
+    public boolean isIllegal() {
+        if(this.illegalMove.isEmpty())
+            return false;
+        return true;
+    }
+    
+    /**
+     * @return : The error message of this Move
+     */
+    public String getIllegalMove() {
+        return illegalMove;
+    }
 
 }

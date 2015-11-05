@@ -11,7 +11,7 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//	
+//  
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
@@ -50,7 +50,7 @@ public class Engine {
     public void addPlayer(String command, String idString) throws IOException {
 
         // Create new process
-    	Process process = Runtime.getRuntime().exec(command);
+        Process process = Runtime.getRuntime().exec(command);
 
         // Attach IO to process
         IOPlayer player = new IOPlayer(process, idString);
@@ -82,15 +82,15 @@ public class Engine {
      * @return : A list of all the players in this game
      */
     public ArrayList<IOPlayer> getPlayers() {
-    	return this.players;
+        return this.players;
     }
     
     /**
      * Starts the game
      */
     public void start() throws Exception {
-    	
-    	int round = 0;
+        
+        int round = 0;
         
         // Set engine to running
         this.isRunning = true;
@@ -100,15 +100,15 @@ public class Engine {
 
         // Keep running
         while (this.isRunning) {
-        	
-        	round++;
+            
+            round++;
 
             // Play a round
             this.logic.playRound(round);
             
             // Check if win condition has been met
             if (this.hasEnded()) {
-            	
+                
                 System.out.println("stopping...");
                 
                 // Stop running
@@ -116,9 +116,9 @@ public class Engine {
                 
                 // Close off everything
                 try {
-                	this.logic.finish();
+                    this.logic.finish();
                 } catch (Exception ex) {
-                	ex.printStackTrace();
+                    ex.printStackTrace();
                 }
             }
         }

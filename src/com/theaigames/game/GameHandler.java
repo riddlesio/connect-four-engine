@@ -11,7 +11,7 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//	
+//  
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
@@ -30,9 +30,9 @@ import com.theaigames.game.player.AbstractPlayer;
  */
 
 public interface GameHandler {
-	public void playRound(int roundNumber); // play one round of the game
-	public int getRoundNumber(); // return the current round number
-	public AbstractPlayer getWinner(); // return the winner of the game, null if no winner yet
-	public boolean isGameOver(); // returns true if the game is over
-	public String getPlayedGame(); // return the complete string of the game that can be parsed by the visualizer.
+    public void playRound(int roundNumber); // play one round of the game
+    public int getRoundNumber(); // return the current round number
+    public AbstractPlayer getWinner(); // return the winner of the game, null if no winner yet
+    public boolean isGameOver(); // returns true if the game is over
+    public String getPlayedGame(); // return the complete string of the game that can be parsed by the visualizer.
 }

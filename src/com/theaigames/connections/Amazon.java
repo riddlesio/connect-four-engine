@@ -11,7 +11,7 @@
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-//	
+//  
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
@@ -56,132 +56,132 @@ import com.amazonaws.Protocol;
  */
 
 public final class Amazon {
-	
-	private static String accessKey, secretKey;
-	private static AmazonS3 s3;
-	
-	private static final String BUCKET_NAME = "theaigames";
+    
+    private static String accessKey, secretKey;
+    private static AmazonS3 s3;
+    
+    private static final String BUCKET_NAME = "theaigames";
 
-	private Amazon() {}
-	
-	/**
-	 * Connects to the Amazon S3 Client. Properties file must be included in
-	 * build path for this to work
-	 */
-	public static void connectToAmazon() {
-		
-		Properties prop = new Properties();
-		
-		// read properties file that contains the keys
-		try {
-			File jarPath = new File(Amazon.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-			String propertiesPath = jarPath.getParentFile().getAbsolutePath();
-			prop.load(new FileInputStream(propertiesPath + "/amazon.properties"));
-//			prop.load(new FileInputStream("amazon.properties")); //FOR ECLIPSE
-			
-			accessKey = prop.getProperty("accessKey");
-			secretKey = prop.getProperty("secretKey");
-		} catch (Exception ex) {
-			throw new RuntimeException("Couldn't read properties file");
-		}
-		
-		AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+    private Amazon() {}
+    
+    /**
+     * Connects to the Amazon S3 Client. Properties file must be included in
+     * build path for this to work
+     */
+    public static void connectToAmazon() {
+        
+        Properties prop = new Properties();
+        
+        // read properties file that contains the keys
+        try {
+            File jarPath = new File(Amazon.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+            String propertiesPath = jarPath.getParentFile().getAbsolutePath();
+            prop.load(new FileInputStream(propertiesPath + "/amazon.properties"));
+//          prop.load(new FileInputStream("amazon.properties")); //FOR ECLIPSE
+            
+            accessKey = prop.getProperty("accessKey");
+            secretKey = prop.getProperty("secretKey");
+        } catch (Exception ex) {
+            throw new RuntimeException("Couldn't read properties file");
+        }
+        
+        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 
-		ClientConfiguration clientConfig = new ClientConfiguration();
-		clientConfig.setProtocol(Protocol.HTTP);
+        ClientConfiguration clientConfig = new ClientConfiguration();
+        clientConfig.setProtocol(Protocol.HTTP);
 
-		s3 = new AmazonS3Client(credentials, clientConfig);
-		s3.setEndpoint("s3-eu-west-1.amazonaws.com");
-	}
-	
-	/**
-	 * Inflates and reads a file from our Amazon given a location of the file
-	 * @param filePath : file path
-	 * @return : the string of the file contents
-	 */
-	public static String readAmazonFile(String filePath) throws IOException, RuntimeException {
-		
-		System.out.println("Reading file from Amazon...");
-		
-		String data = "";
-		
-		if(s3 == null)
-			throw new RuntimeException("Connection to Amazon s3 Client isn't established yet. Run Amazon.connectToAmazon() first.");
-		
-		try {
-			URL url = new URL(filePath);
-			String bucket = url.getPath().substring(1).split("/")[0];
-			String key = url.getPath().substring(2 + bucket.length());
+        s3 = new AmazonS3Client(credentials, clientConfig);
+        s3.setEndpoint("s3-eu-west-1.amazonaws.com");
+    }
+    
+    /**
+     * Inflates and reads a file from our Amazon given a location of the file
+     * @param filePath : file path
+     * @return : the string of the file contents
+     */
+    public static String readAmazonFile(String filePath) throws IOException, RuntimeException {
+        
+        System.out.println("Reading file from Amazon...");
+        
+        String data = "";
+        
+        if(s3 == null)
+            throw new RuntimeException("Connection to Amazon s3 Client isn't established yet. Run Amazon.connectToAmazon() first.");
+        
+        try {
+            URL url = new URL(filePath);
+            String bucket = url.getPath().substring(1).split("/")[0];
+            String key = url.getPath().substring(2 + bucket.length());
 
-			S3Object s3obj = s3.getObject(bucket, key);
-			
-			GZIPInputStream gzis = new GZIPInputStream(new BufferedInputStream(s3obj.getObjectContent()));
-			BufferedReader bf = new BufferedReader(new InputStreamReader(gzis));
+            S3Object s3obj = s3.getObject(bucket, key);
+            
+            GZIPInputStream gzis = new GZIPInputStream(new BufferedInputStream(s3obj.getObjectContent()));
+            BufferedReader bf = new BufferedReader(new InputStreamReader(gzis));
 
-			String line;
-			while((line = bf.readLine()) != null) {
-				data += line;
-			}
-		} catch (IOException ex) {
-			throw new IOException(String.format("Error reading file %s from Amazon S3 Client: %s", filePath, ex));
-		}
-		
-		return data;
-	}
-	
-	/**
-	 * Compresses a string and stores it in a file on Amazon
-	 * @param data : data to be stored
-	 * @param outFile : name of the file to store data to
-	 * @return : full path of the file
-	 */
-	public static String saveToAmazon(String data, String outFile)
-	{
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			Writer writer = new OutputStreamWriter(baos);
-			writer.write(data);
-			writer.flush();
-			writer.close();
+            String line;
+            while((line = bf.readLine()) != null) {
+                data += line;
+            }
+        } catch (IOException ex) {
+            throw new IOException(String.format("Error reading file %s from Amazon S3 Client: %s", filePath, ex));
+        }
+        
+        return data;
+    }
+    
+    /**
+     * Compresses a string and stores it in a file on Amazon
+     * @param data : data to be stored
+     * @param outFile : name of the file to store data to
+     * @return : full path of the file
+     */
+    public static String saveToAmazon(String data, String outFile)
+    {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Writer writer = new OutputStreamWriter(baos);
+            writer.write(data);
+            writer.flush();
+            writer.close();
 
-			byte[] zippedBytes = compressGZip(baos.toByteArray());
+            byte[] zippedBytes = compressGZip(baos.toByteArray());
 
-			ObjectMetadata omd = new ObjectMetadata();
-			omd.setContentLength(zippedBytes.length);
+            ObjectMetadata omd = new ObjectMetadata();
+            omd.setContentLength(zippedBytes.length);
 
-			PutObjectRequest putObj = new PutObjectRequest(BUCKET_NAME, outFile, new ByteArrayInputStream(zippedBytes), omd);
-			putObj.setCannedAcl(CannedAccessControlList.PublicRead);
+            PutObjectRequest putObj = new PutObjectRequest(BUCKET_NAME, outFile, new ByteArrayInputStream(zippedBytes), omd);
+            putObj.setCannedAcl(CannedAccessControlList.PublicRead);
 
-			s3.putObject(putObj);
-			String amazonLink = String.format("https://s3-eu-west-1.amazonaws.com/%s/", BUCKET_NAME);
+            s3.putObject(putObj);
+            String amazonLink = String.format("https://s3-eu-west-1.amazonaws.com/%s/", BUCKET_NAME);
 
-			return amazonLink + outFile;
-		}
-		catch(IOException e) {
-			System.out.println(e);
-			return "";
-		}
-	}
-	
-	/** 
-	 * Compresses a byte array with GZIP
-	 * @param bytes : input byte array
-	 * @return : compressed byte array
-	 */
-	private static byte[] compressGZip(byte[] bytes) throws IOException
-	{
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			GZIPOutputStream gzos = new GZIPOutputStream(baos);
+            return amazonLink + outFile;
+        }
+        catch(IOException e) {
+            System.out.println(e);
+            return "";
+        }
+    }
+    
+    /** 
+     * Compresses a byte array with GZIP
+     * @param bytes : input byte array
+     * @return : compressed byte array
+     */
+    private static byte[] compressGZip(byte[] bytes) throws IOException
+    {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            GZIPOutputStream gzos = new GZIPOutputStream(baos);
 
-			gzos.write(bytes, 0, bytes.length);
-			gzos.finish();
-			gzos.close();
+            gzos.write(bytes, 0, bytes.length);
+            gzos.finish();
+            gzos.close();
 
-			return baos.toByteArray();
-		}
-		catch(IOException e) {
-			throw e;
-		}
-	}
+            return baos.toByteArray();
+        }
+        catch(IOException e) {
+            throw e;
+        }
+    }
 }
