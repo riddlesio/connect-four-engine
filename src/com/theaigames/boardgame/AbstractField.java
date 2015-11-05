@@ -13,38 +13,38 @@ import com.theaigames.game.player.AbstractPlayer;
  * @author Joost de Meij <developers@starapple.nl>
  */
 public class AbstractField {
-	private AbstractPlayer mOwner;
-	private String mType;
-	private String mPiece;
-	private String mTag;
-	
-	public AbstractField() {
-	}
-	
-	public void setOwner(AbstractPlayer owner) {
-		mOwner = owner;
-	}
-	public void setType(String type) {
-		mType = type;
-	}
-	public void setPiece(String piece) {
-		mPiece = piece;
-	}
-	public void setTag(String tag) {
-		mTag = tag;
-	}
-	
-	public AbstractPlayer getOwner() {
-		return mOwner;
-	}
-	public String getType() {
-		return mType;
-	}
-	public String getPiece() {
-		return mPiece;
-	}
-	public String getTag() {
-		return mTag;
-	}
-	
+    private AbstractPlayer mOwner;
+    private String mType;
+    private String mPiece;
+    private String mTag;
+    
+    public AbstractField() {
+    }
+    
+    public void setOwner(AbstractPlayer owner) {
+        mOwner = owner;
+    }
+    public void setType(String type) {
+        mType = type;
+    }
+    public void setPiece(String piece) {
+        mPiece = piece;
+    }
+    public void setTag(String tag) {
+        mTag = tag;
+    }
+    
+    public AbstractPlayer getOwner() {
+        return mOwner;
+    }
+    public String getType() {
+        return mType;
+    }
+    public String getPiece() {
+        return mPiece;
+    }
+    public String getTag() {
+        return mTag;
+    }
+    
 }
