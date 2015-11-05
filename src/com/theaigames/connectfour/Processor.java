@@ -110,7 +110,7 @@ public class Processor implements GameHandler {
 				}
 				
 				player.sendUpdate("field", mField.toString());
-				mField.dumpBoard();
+				// mField.dumpBoard();
 			}
 		}
 	}
@@ -122,7 +122,6 @@ public class Processor implements GameHandler {
 	 */
 	private Boolean parseResponse(String r, Player player) {
 		String[] parts = r.split(" ");
-		System.out.println("r " + r);
         if (parts[0].equals("place_disc")) {
         	int column = Integer.parseInt(parts[1]);
         	

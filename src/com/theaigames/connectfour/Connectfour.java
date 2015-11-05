@@ -32,12 +32,12 @@ public class Connectfour extends AbstractGame {
 		
 		for(int i=0; i<ioPlayers.size(); i++) {
 			// create the player
-			String playerName = ioPlayers.get(i).getIdString();
+			String playerName = String.format("player%d", i+1);
 			Player player = new Player(playerName, ioPlayers.get(i), TIMEBANK_MAX, TIME_PER_MOVE, i+1);
 			this.players.add(player);
 
 		}
-		for(Player player : this.players) {
+		for(AbstractPlayer player : this.players) {
 			sendSettings(player);
 		}
 		
@@ -45,15 +45,14 @@ public class Connectfour extends AbstractGame {
 		super.processor = new Processor(this.players, this.mField);
 	}
 
-	public void sendSettings(Player player) {
+	@Override
+	public void sendSettings(AbstractPlayer player) {
 		player.sendSetting("timebank", TIMEBANK_MAX);
 		player.sendSetting("time_per_move", TIME_PER_MOVE);
 		player.sendSetting("player_names", this.players.get(0).getName() + "," + this.players.get(1).getName());
 		player.sendSetting("your_bot", player.getName());
 		player.sendSetting("field_columns", FIELD_COLUMNS);
 		player.sendSetting("field_rows", FIELD_ROWS);
-		player.sendSetting("bot_id", player.getId());
-
 	}
 
 	@Override
@@ -67,11 +66,5 @@ public class Connectfour extends AbstractGame {
 		
 		game.setupEngine(args);
 		game.runEngine();
-	}
-
-	@Override
-	public void sendSettings(AbstractPlayer player) {
-		// TODO Auto-generated method stub
-		
 	}
 }
