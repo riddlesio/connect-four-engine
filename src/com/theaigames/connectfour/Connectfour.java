@@ -47,13 +47,9 @@ public class Connectfour extends AbstractGame {
 		// create the processor
 		super.processor = new Processor(this.players, this.mField);
 	}
-
+	
 	@Override
-<<<<<<< HEAD
 	public void sendSettings(AbstractPlayer player) {
-=======
-	public void sendSettings(Player player) {
->>>>>>> 10f3199... changes to get it working on theaigames
 		player.sendSetting("timebank", TIMEBANK_MAX);
 		player.sendSetting("time_per_move", TIME_PER_MOVE);
 		player.sendSetting("player_names", this.players.get(0).getName() + "," + this.players.get(1).getName());
