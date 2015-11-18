@@ -58,7 +58,7 @@ public class Field {
     public Boolean addDisc(int column, int disc) {
         mLastError = "";
         mLastColumn = column;
-        if (column < mCols) {
+        if (column >= 0 && column < mCols) {
             for (int y = mRows-1; y >= 0; y--) { // From bottom column up
                 if (mBoard[column][y] == 0) {
                     mBoard[column][y] = disc;
