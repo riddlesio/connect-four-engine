@@ -216,17 +216,15 @@ public class Processor implements GameHandler {
                 winDiscsJSON.put("windisc3", winDiscJSON);
             }
             */
-            
-            Hashtable<String,String> settings = new Hashtable<String, String>();
-            
+                       
             JSONArray playerNames = new JSONArray();
             for(Player player : this.mPlayers) {
                 playerNames.put(player.getName());
             }
-            String winnerplayer = winner.getName();
-            if (mField.isFull()) { /* The board is full, no winner. */
-                winnerplayer = "none";
-            }
+            String winnerplayer = "none";
+            if (winner != null) { 
+            	winnerplayer = winner.getName();
+        	}
             
             output.put("settings", new JSONObject()
             .put("field", new JSONObject()
