@@ -130,11 +130,11 @@ public class Processor implements GameHandler {
         String[] parts = r.split(" ");
         if (parts[0].equals("place_disc")) {
             int column = Integer.parseInt(parts[1]);
-            
             if (mField.addDisc(column, player.getId())) {
                 return true;
             }
         }
+        mField.mLastError = "Unknown command";
         return false;
     }
 

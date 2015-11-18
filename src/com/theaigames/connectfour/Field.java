@@ -9,7 +9,7 @@ public class Field {
     
     private int[][] mBoard;
     private int mCols = 0, mRows = 0;
-    private String mLastError = "";
+    public String mLastError = "";
     private int mLastColumn = 0;
     private final int INAROW = 4; /* Number of cells in a row needed for a win */
     private String mWinType = "None";
