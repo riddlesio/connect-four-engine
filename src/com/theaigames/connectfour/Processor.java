@@ -32,10 +32,9 @@ import com.theaigames.game.GameHandler;
 
 public class Processor implements GameHandler {
     
-    private int mRoundNumber = 0;
+    private int mRoundNumber = 1;
     private List<Player> mPlayers;
     private List<Move> mMoves;
-    private List<Disc> mWinningDiscs;
     private List<MoveResult> mMoveResults;
     private Field mField;
     private int mGameOverByPlayerErrorPlayerId = 0;
@@ -56,7 +55,6 @@ public class Processor implements GameHandler {
 
     @Override
     public void playRound(int roundNumber) {
-        mRoundNumber = roundNumber;
         for (Player player : mPlayers) {
             player.sendUpdate("round",  mRoundNumber);
             player.sendUpdate("field", mField.toString());
@@ -118,7 +116,7 @@ public class Processor implements GameHandler {
                 }
                 
                 player.sendUpdate("field", mField.toString());
-                // mField.dumpBoard();
+                mRoundNumber++;
             }
         }
     }
