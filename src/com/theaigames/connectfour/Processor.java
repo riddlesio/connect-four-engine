@@ -128,7 +128,7 @@ public class Processor implements GameHandler {
      */
     private Boolean parseResponse(String r, Player player) {
         String[] parts = r.split(" ");
-        if (parts[0].equals("place_disc")) {
+        if (parts.length >= 2 && parts[0].equals("place_disc")) {
             int column = Integer.parseInt(parts[1]);
             if (mField.addDisc(column, player.getId())) {
                 return true;
