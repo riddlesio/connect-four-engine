@@ -70,7 +70,7 @@ public class ConnectfourMoveDeserializer implements Deserializer<ConnectfourMove
     public MoveType visitAssessment(String input) throws InvalidInputException {
         switch (input) {
             case "place_disc":
-                return MoveType.PLACEDISC;
+                return MoveType.PLACEMOVE;
             default:
                 throw new InvalidInputException("Move isn't valid");
         }
