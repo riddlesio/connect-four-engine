@@ -58,20 +58,19 @@ public class ConnectfourMoveDeserializer implements Deserializer<ConnectfourMove
 
     private ConnectfourMove visitMove(String input) throws InvalidInputException {
         String[] split = input.split(" ");
-        if (split.length != 3) {
+        if (split.length != 2) {
             throw new InvalidInputException("Syntax error.");
         }
         MoveType type = visitAssessment(split[0]);
         int column = Integer.parseInt(split[1]);
-        int row = Integer.parseInt(split[2]);
-        Coordinate c = new Coordinate(column, row);
+        Coordinate c = new Coordinate(column, 0);
         return new ConnectfourMove(this.player, c);
     }
 
     public MoveType visitAssessment(String input) throws InvalidInputException {
         switch (input) {
-            case "place_move":
-                return MoveType.PLACEMOVE;
+            case "place_disc":
+                return MoveType.PLACEDISC;
             default:
                 throw new InvalidInputException("Move isn't valid");
         }

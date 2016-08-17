@@ -12,5 +12,5 @@ package io.riddles.connectfour.game.data;
  */
 
 public enum MoveType {
-    PLACEMOVE;
+    PLACEDISC;
 }
