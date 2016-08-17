@@ -17,14 +17,12 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game.player;
-
-import io.riddles.javainterface.game.player.AbstractPlayer;
+package io.riddles.connectfour.game.move;
 
 /**
  * ${PACKAGE_NAME}
  *
- * This file is a part of FourInARow
+ * This file is a part of Connectfour
  *
  * Copyright 2016 - present Riddles.io
  * For license information see the LICENSE file in the project root
@@ -32,20 +30,11 @@ import io.riddles.javainterface.game.player.AbstractPlayer;
  * @author Niko
  */
 
+public enum ActionType {
+    MOVE;
 
-public class FourInARowPlayer extends AbstractPlayer {
-
-
-    private String email;
-    public FourInARowPlayer(int id) {
-        super(id);
-    }
-
+    @Override
     public String toString() {
-        return "FourInARowPlayer " + this.getId();
+        return this.name().toLowerCase();
     }
-
-    public void setEmail(String e) { this.email = e; }
-    public String getEmail() { return this.email; }
-
 }

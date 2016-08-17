@@ -17,9 +17,9 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game.state;
+package io.riddles.connectfour.game.state;
 
-import io.riddles.fourinarownew.game.player.FourInARowPlayer;
+import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,21 +29,21 @@ import java.util.ArrayList;
 import io.riddles.javainterface.game.state.AbstractStateDeserializer;
 
 /**
- * FourInARowDeserializer takes a serialised String and returns a FourInARowState.
+ * ConnectfourDeserializer takes a serialised String and returns a ConnectfourState.
  *
  * @author jim
  */
-public class FourInARowDeserializer extends
-        AbstractStateDeserializer<FourInARowPlayer, FourInARowState> {
+public class ConnectfourDeserializer extends
+        AbstractStateDeserializer<ConnectfourPlayer, ConnectfourState> {
 
     /* Constructor */
-    public FourInARowDeserializer(ArrayList<FourInARowPlayer> players) {
+    public ConnectfourDeserializer(ArrayList<ConnectfourPlayer> players) {
         super(players);
     }
 
     @Override
-    public FourInARowState traverse(String statesString) throws JSONException {
-        FourInARowState state = null;
+    public ConnectfourState traverse(String statesString) throws JSONException {
+        ConnectfourState state = null;
         Object states = new JSONObject(statesString);
 
         if (states instanceof JSONArray) {
@@ -62,8 +62,8 @@ public class FourInARowDeserializer extends
         return state;
     }
 
-    private FourInARowState visitState(JSONObject stateJson,
-                                      FourInARowState previousState) throws JSONException {
+    private ConnectfourState visitState(JSONObject stateJson,
+                                        ConnectfourState previousState) throws JSONException {
         int roundNumber = stateJson.getInt("round");
         return null;
     }

@@ -17,37 +17,37 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game;
+package io.riddles.connectfour.game;
 
-import io.riddles.fourinarownew.game.player.FourInARowPlayer;
-import io.riddles.fourinarownew.game.processor.FourInARowProcessor;
+import io.riddles.connectfour.game.player.ConnectfourPlayer;
+import io.riddles.connectfour.game.processor.ConnectfourProcessor;
+import io.riddles.connectfour.game.state.ConnectfourState;
 import io.riddles.javainterface.game.player.AbstractPlayer;
-import io.riddles.fourinarownew.game.state.FourInARowState;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import io.riddles.javainterface.game.AbstractGameSerializer;
 
 /**
- * FourInARowSerializer takes a FourInARowState and serialises it and all previous states into a JSON String.
+ * ConnectfourSerializer takes a ConnectfourState and serialises it and all previous states into a JSON String.
  * Customize this to add all game specific data to the output.
  *
  * @author jim
  */
-public class FourInARowSerializer extends
-        AbstractGameSerializer<FourInARowProcessor, FourInARowState> {
+public class ConnectfourSerializer extends
+        AbstractGameSerializer<ConnectfourProcessor, ConnectfourState> {
 
     @Override
-    public String traverseToString(FourInARowProcessor processor, FourInARowState initialState) {
+    public String traverseToString(ConnectfourProcessor processor, ConnectfourState initialState) {
         JSONObject game = new JSONObject();
 
 
         // add all states
         JSONArray states = new JSONArray();
-        FourInARowState state = initialState;
-        io.riddles.fourinarownew.game.state.FourInARowSerializer serializer = new io.riddles.fourinarownew.game.state.FourInARowSerializer();
+        ConnectfourState state = initialState;
+        io.riddles.connectfour.game.state.ConnectfourSerializer serializer = new io.riddles.connectfour.game.state.ConnectfourSerializer();
         while (state.hasNextState()) {
-            state = (FourInARowState) state.getNextState();
+            state = (ConnectfourState) state.getNextState();
 
             states.put(serializer.traverseToJson(state, true));
             states.put(serializer.traverseToJson(state, false));
@@ -67,7 +67,7 @@ public class FourInARowSerializer extends
         return game.toString();
     }
 
-    protected JSONObject getSettingsJSON(JSONObject game, FourInARowProcessor processor) {
+    protected JSONObject getSettingsJSON(JSONObject game, ConnectfourProcessor processor) {
         JSONObject settings = new JSONObject();
 
 
@@ -88,7 +88,7 @@ public class FourInARowSerializer extends
         return settings;
     }
 
-    protected JSONObject getPlayersJSON(FourInARowProcessor processor) {
+    protected JSONObject getPlayersJSON(ConnectfourProcessor processor) {
 
         JSONArray playerNames = new JSONArray();
         for (Object obj : processor.getPlayers()) {
@@ -104,11 +104,11 @@ public class FourInARowSerializer extends
     }
 
 
-    protected JSONArray getPlayerDataJSON(FourInARowProcessor processor) {
+    protected JSONArray getPlayerDataJSON(ConnectfourProcessor processor) {
 
         JSONArray playerData = new JSONArray();
-        for (FourInARowPlayer obj : processor.getPlayers()) {
-            FourInARowPlayer player = obj;
+        for (ConnectfourPlayer obj : processor.getPlayers()) {
+            ConnectfourPlayer player = obj;
             JSONObject p = new JSONObject();
 
             p.put("name", player.getName());

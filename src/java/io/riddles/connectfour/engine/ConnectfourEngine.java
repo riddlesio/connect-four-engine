@@ -1,14 +1,14 @@
-package io.riddles.fourinarownew.engine;
+package io.riddles.connectfour.engine;
 
-import io.riddles.fourinarownew.game.FourInARowSerializer;
-import io.riddles.fourinarownew.game.data.FourInARowBoard;
-import io.riddles.fourinarownew.game.player.FourInARowPlayer;
-import io.riddles.fourinarownew.game.processor.FourInARowProcessor;
-import io.riddles.fourinarownew.game.state.FourInARowState;
+import io.riddles.connectfour.game.ConnectfourSerializer;
+import io.riddles.connectfour.game.data.ConnectfourBoard;
+import io.riddles.connectfour.game.player.ConnectfourPlayer;
+import io.riddles.connectfour.game.processor.ConnectfourProcessor;
+import io.riddles.connectfour.game.state.ConnectfourState;
 import io.riddles.javainterface.engine.AbstractEngine;
 
 /**
- * FourInARowEngine:
+ * ConnectfourEngine:
  * - Creates a Processor, the Players and an initial State
  * - Parses the setup input
  * - Sends settings to the players
@@ -17,14 +17,14 @@ import io.riddles.javainterface.engine.AbstractEngine;
  *
  * Created by joost on 6/27/16.
  */
-public class FourInARowEngine extends AbstractEngine<FourInARowProcessor, FourInARowPlayer, FourInARowState> {
+public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, ConnectfourPlayer, ConnectfourState> {
 
-    public FourInARowEngine() {
+    public ConnectfourEngine() {
 
         super();
     }
 
-    public FourInARowEngine(String wrapperFile, String[] botFiles) {
+    public ConnectfourEngine(String wrapperFile, String[] botFiles) {
 
         super(wrapperFile, botFiles);
     }
@@ -33,8 +33,8 @@ public class FourInARowEngine extends AbstractEngine<FourInARowProcessor, FourIn
      * returns: a Player
      */
     @Override
-    protected FourInARowPlayer createPlayer(int id) {
-        FourInARowPlayer p = new FourInARowPlayer(id);
+    protected ConnectfourPlayer createPlayer(int id) {
+        ConnectfourPlayer p = new ConnectfourPlayer(id);
         return p;
     }
 
@@ -42,33 +42,33 @@ public class FourInARowEngine extends AbstractEngine<FourInARowProcessor, FourIn
      * returns: a Processor
      */
     @Override
-    protected FourInARowProcessor createProcessor() {
-        return new FourInARowProcessor(this.players);
+    protected ConnectfourProcessor createProcessor() {
+        return new ConnectfourProcessor(this.players);
     }
 
     /* sendGameSettings sends the game settings to a Player
      * returns:
      */
     @Override
-    protected void sendGameSettings(FourInARowPlayer player) {
+    protected void sendGameSettings(ConnectfourPlayer player) {
     }
 
     /* getPlayedGame creates a serializer and serialises the game
      * returns: String with the serialised game.
      */
     @Override
-    protected String getPlayedGame(FourInARowState state) {
-        FourInARowSerializer serializer = new FourInARowSerializer();
+    protected String getPlayedGame(ConnectfourState state) {
+        ConnectfourSerializer serializer = new ConnectfourSerializer();
         return serializer.traverseToString(this.processor, state);
     }
 
     /* getInitialState creates an initial state to start the game with.
-     * returns: FourInARowState
+     * returns: ConnectfourState
      */
     @Override
-    protected FourInARowState getInitialState() {
-        FourInARowState s = new FourInARowState();
-        s.setBoard(new FourInARowBoard(9,9));
+    protected ConnectfourState getInitialState() {
+        ConnectfourState s = new ConnectfourState();
+        s.setBoard(new ConnectfourBoard(9,9));
         return s;
     }
 
@@ -83,7 +83,7 @@ public class FourInARowEngine extends AbstractEngine<FourInARowProcessor, FourIn
         if (command.equals("bot_ids")) {
             String[] ids = split[1].split(",");
             for (int i = 0; i < ids.length; i++) {
-                FourInARowPlayer player = createPlayer(Integer.parseInt(ids[i]));
+                ConnectfourPlayer player = createPlayer(Integer.parseInt(ids[i]));
 
                 if (this.botInputFiles != null)
                     player.setInputFile(this.botInputFiles[i]);

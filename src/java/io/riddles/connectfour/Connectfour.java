@@ -17,21 +17,21 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew;
+package io.riddles.connectfour;
 
-import io.riddles.fourinarownew.engine.FourInARowEngine;
+import io.riddles.connectfour.engine.ConnectfourEngine;
 import io.riddles.javainterface.exception.TerminalException;
 
 /**
- * Entry point for FourInARow. It creates an engine and runs it.
+ * Entry point for Connectfour. It creates an engine and runs it.
  * When an Exception escalates all the way through, the System exits with a status code.
  *
  * @author jim
  */
-public class FourInARow {
+public class Connectfour {
 
     public static void main(String[] args) {
-        FourInARowEngine engine = new FourInARowEngine();
+        ConnectfourEngine engine = new ConnectfourEngine();
 
         try {
             engine.run();

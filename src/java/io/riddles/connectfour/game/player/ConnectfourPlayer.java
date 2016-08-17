@@ -17,18 +17,14 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game.move;
+package io.riddles.connectfour.game.player;
 
-import io.riddles.fourinarownew.game.data.Coordinate;
-import io.riddles.fourinarownew.game.data.MoveType;
-import io.riddles.fourinarownew.game.player.FourInARowPlayer;
-import io.riddles.javainterface.exception.InvalidInputException;
-import io.riddles.javainterface.game.move.AbstractMove;
+import io.riddles.javainterface.game.player.AbstractPlayer;
 
 /**
  * ${PACKAGE_NAME}
  *
- * This file is a part of FourInARow
+ * This file is a part of Connectfour
  *
  * Copyright 2016 - present Riddles.io
  * For license information see the LICENSE file in the project root
@@ -37,27 +33,19 @@ import io.riddles.javainterface.game.move.AbstractMove;
  */
 
 
-public class FourInARowMove extends AbstractMove<FourInARowPlayer> {
+public class ConnectfourPlayer extends AbstractPlayer {
 
-    private MoveType type;
-    private Coordinate coordinate;
 
-    public FourInARowMove(FourInARowPlayer player, Coordinate c) {
-        super(player);
-        coordinate = c;
-
+    private String email;
+    public ConnectfourPlayer(int id) {
+        super(id);
     }
 
-    public FourInARowMove(FourInARowPlayer player, InvalidInputException exception) {
-        super(player, exception);
+    public String toString() {
+        return "ConnectfourPlayer " + this.getId();
     }
 
-    public MoveType getMoveType() {
-        return this.type;
-    }
-
-    public Coordinate getCoordinate() { return this.coordinate; }
-
-
+    public void setEmail(String e) { this.email = e; }
+    public String getEmail() { return this.email; }
 
 }

@@ -17,18 +17,18 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game.move;
+package io.riddles.connectfour.game.move;
 
-import io.riddles.fourinarownew.game.data.Coordinate;
-import io.riddles.fourinarownew.game.data.MoveType;
-import io.riddles.fourinarownew.game.player.FourInARowPlayer;
+import io.riddles.connectfour.game.data.Coordinate;
+import io.riddles.connectfour.game.data.MoveType;
+import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.javainterface.exception.InvalidInputException;
 import io.riddles.javainterface.serialize.Deserializer;
 
 /**
  * ${PACKAGE_NAME}
  *
- * This file is a part of FourInARow
+ * This file is a part of Connectfour
  *
  * Copyright 2016 - present Riddles.io
  * For license information see the LICENSE file in the project root
@@ -36,27 +36,27 @@ import io.riddles.javainterface.serialize.Deserializer;
  * @author Niko
  */
 
-public class FourInARowMoveDeserializer implements Deserializer<FourInARowMove> {
+public class ConnectfourMoveDeserializer implements Deserializer<ConnectfourMove> {
 
-    private FourInARowPlayer player;
+    private ConnectfourPlayer player;
 
-    public FourInARowMoveDeserializer(FourInARowPlayer player) {
+    public ConnectfourMoveDeserializer(ConnectfourPlayer player) {
         this.player = player;
     }
 
     @Override
-    public FourInARowMove traverse(String string) {
+    public ConnectfourMove traverse(String string) {
         try {
             return visitMove(string);
         } catch (InvalidInputException ex) {
-            return new FourInARowMove(this.player, ex);
+            return new ConnectfourMove(this.player, ex);
         } catch (Exception ex) {
-            return new FourInARowMove(
+            return new ConnectfourMove(
                 this.player, new InvalidInputException("Failed to parse move"));
         }
     }
 
-    private FourInARowMove visitMove(String input) throws InvalidInputException {
+    private ConnectfourMove visitMove(String input) throws InvalidInputException {
         String[] split = input.split(" ");
         if (split.length != 3) {
             throw new InvalidInputException("Syntax error.");
@@ -65,7 +65,7 @@ public class FourInARowMoveDeserializer implements Deserializer<FourInARowMove> 
         int column = Integer.parseInt(split[1]);
         int row = Integer.parseInt(split[2]);
         Coordinate c = new Coordinate(column, row);
-        return new FourInARowMove(this.player, c);
+        return new ConnectfourMove(this.player, c);
     }
 
     public MoveType visitAssessment(String input) throws InvalidInputException {

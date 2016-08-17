@@ -1,24 +1,24 @@
-package io.riddles.fourinarownew.game.processor;
+package io.riddles.connectfour.game.processor;
 
-import io.riddles.fourinarownew.game.player.FourInARowPlayer;
+import io.riddles.connectfour.game.player.ConnectfourPlayer;
+import io.riddles.connectfour.game.state.ConnectfourState;
 import io.riddles.javainterface.exception.InvalidInputException;
-import io.riddles.fourinarownew.game.data.Coordinate;
-import io.riddles.fourinarownew.game.data.FourInARowBoard;
-import io.riddles.fourinarownew.game.move.FourInARowMove;
-import io.riddles.fourinarownew.game.state.FourInARowState;
+import io.riddles.connectfour.game.data.Coordinate;
+import io.riddles.connectfour.game.data.ConnectfourBoard;
+import io.riddles.connectfour.game.move.ConnectfourMove;
 
 import java.util.ArrayList;
 
 /**
  * Created by joost on 3-7-16.
  */
-public class FourInARowLogic {
+public class ConnectfourLogic {
 
 
-    public FourInARowLogic() {
+    public ConnectfourLogic() {
     }
 
-    public FourInARowState transformBoard(FourInARowState state, FourInARowMove move, ArrayList<FourInARowPlayer> players) throws InvalidInputException {
+    public ConnectfourState transformBoard(ConnectfourState state, ConnectfourMove move, ArrayList<ConnectfourPlayer> players) throws InvalidInputException {
 
         if (move.getException() == null) {
             transformMoveLocation(state, move, players);
@@ -27,12 +27,12 @@ public class FourInARowLogic {
         return state;
     }
 
-    private void transformMoveLocation(FourInARowState state, FourInARowMove move, ArrayList<FourInARowPlayer> players) {
-        FourInARowPlayer p = move.getPlayer();
-        FourInARowBoard board = state.getBoard();
+    private void transformMoveLocation(ConnectfourState state, ConnectfourMove move, ArrayList<ConnectfourPlayer> players) {
+        ConnectfourPlayer p = move.getPlayer();
+        ConnectfourBoard board = state.getBoard();
 
         int pId = p.getId();
-        FourInARowBoard b = state.getBoard();
+        ConnectfourBoard b = state.getBoard();
         Coordinate c = move.getCoordinate();
         b.updateMacroboard();
 

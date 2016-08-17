@@ -1,4 +1,4 @@
-package io.riddles.fourinarownew.game.data;
+package io.riddles.connectfour.game.data;
 
 /**
  * Created by joost on 8/9/16.

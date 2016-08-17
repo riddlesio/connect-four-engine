@@ -17,38 +17,38 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game.state;
+package io.riddles.connectfour.game.state;
 
-import io.riddles.fourinarownew.game.move.FourInARowMove;
+import io.riddles.connectfour.game.move.ConnectfourMove;
 import org.json.JSONObject;
 import io.riddles.javainterface.game.state.AbstractStateSerializer;
 
 /**
- * FourInARowSerializer takes a FourInARowState and serialises it into a String.
+ * ConnectfourSerializer takes a ConnectfourState and serialises it into a String.
  *
  * @author jim
  */
-public class FourInARowSerializer extends AbstractStateSerializer<FourInARowState> {
+public class ConnectfourSerializer extends AbstractStateSerializer<ConnectfourState> {
 
     @Override
-    public String traverseToString(FourInARowState state) {
+    public String traverseToString(ConnectfourState state) {
         return visitState(state, false).toString();
     }
 
     @Override
-    public JSONObject traverseToJson(FourInARowState state) throws NullPointerException {
+    public JSONObject traverseToJson(ConnectfourState state) throws NullPointerException {
         return visitState(state, false);
     }
 
-    public JSONObject traverseToJson(FourInARowState state, Boolean showPossibleMoves) throws NullPointerException {
+    public JSONObject traverseToJson(ConnectfourState state, Boolean showPossibleMoves) throws NullPointerException {
         return visitState(state, showPossibleMoves);
     }
 
-    private JSONObject visitState(FourInARowState state, Boolean showPossibleMoves) throws NullPointerException {
+    private JSONObject visitState(ConnectfourState state, Boolean showPossibleMoves) throws NullPointerException {
         JSONObject stateJson = new JSONObject();
         stateJson.put("move", state.getMoveNumber());
 
-        FourInARowMove move = state.getMoves().get(0);
+        ConnectfourMove move = state.getMoves().get(0);
 
         stateJson.put("movetype", move.getMoveType());
         stateJson.put("winner", ""); /* TODO: find a winner */

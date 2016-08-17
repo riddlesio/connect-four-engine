@@ -1,9 +1,9 @@
-package io.riddles.fourinarownew.game.data;
+package io.riddles.connectfour.game.data;
 
 /**
  * ${PACKAGE_NAME}
  *
- * This file is a part of FourInARow
+ * This file is a part of Connectfour
  *
  * Copyright 2016 - present Riddles.io
  * For license information see the LICENSE file in the project root
@@ -11,7 +11,7 @@ package io.riddles.fourinarownew.game.data;
  * @author Niko
  */
 
-public class FourInARowBoard {
+public class ConnectfourBoard {
     protected int[][] board;
     protected int[][] macroboard;
 
@@ -22,7 +22,7 @@ public class FourInARowBoard {
 
 
 
-    public FourInARowBoard(int w, int h) {
+    public ConnectfourBoard(int w, int h) {
         this.width = w;
         this.height = h;
         this.board = new int[w][h];

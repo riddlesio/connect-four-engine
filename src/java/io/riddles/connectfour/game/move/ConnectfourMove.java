@@ -17,12 +17,18 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game.move;
+package io.riddles.connectfour.game.move;
+
+import io.riddles.connectfour.game.data.Coordinate;
+import io.riddles.connectfour.game.data.MoveType;
+import io.riddles.connectfour.game.player.ConnectfourPlayer;
+import io.riddles.javainterface.exception.InvalidInputException;
+import io.riddles.javainterface.game.move.AbstractMove;
 
 /**
  * ${PACKAGE_NAME}
  *
- * This file is a part of FourInARow
+ * This file is a part of Connectfour
  *
  * Copyright 2016 - present Riddles.io
  * For license information see the LICENSE file in the project root
@@ -30,11 +36,28 @@ package io.riddles.fourinarownew.game.move;
  * @author Niko
  */
 
-public enum ActionType {
-    MOVE;
 
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
+public class ConnectfourMove extends AbstractMove<ConnectfourPlayer> {
+
+    private MoveType type;
+    private Coordinate coordinate;
+
+    public ConnectfourMove(ConnectfourPlayer player, Coordinate c) {
+        super(player);
+        coordinate = c;
+
     }
+
+    public ConnectfourMove(ConnectfourPlayer player, InvalidInputException exception) {
+        super(player, exception);
+    }
+
+    public MoveType getMoveType() {
+        return this.type;
+    }
+
+    public Coordinate getCoordinate() { return this.coordinate; }
+
+
+
 }

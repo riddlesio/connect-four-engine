@@ -17,34 +17,34 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.fourinarownew.game.processor;
+package io.riddles.connectfour.game.processor;
 
 import java.util.ArrayList;
 
-import io.riddles.fourinarownew.game.player.FourInARowPlayer;
+import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.javainterface.game.processor.AbstractProcessor;
-import io.riddles.fourinarownew.game.move.*;
-import io.riddles.fourinarownew.game.state.FourInARowState;
+import io.riddles.connectfour.game.move.*;
+import io.riddles.connectfour.game.state.ConnectfourState;
 
 /**
- * This file is a part of FourInARow
+ * This file is a part of Connectfour
  *
  * Copyright 2016 - present Riddles.io
  * For license information see the LICENSE file in the project root
  *
- * FourInARowProcessor shall process a State and return the result.
+ * ConnectfourProcessor shall process a State and return the result.
  *
  * @author joost
  */
-public class FourInARowProcessor extends AbstractProcessor<FourInARowPlayer, FourInARowState> {
+public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, ConnectfourState> {
 
     private int roundNumber;
     private boolean gameOver;
-    private FourInARowPlayer winner;
+    private ConnectfourPlayer winner;
 
 
     /* Constructor */
-    public FourInARowProcessor(ArrayList<FourInARowPlayer> players) {
+    public ConnectfourProcessor(ArrayList<ConnectfourPlayer> players) {
         super(players);
         this.gameOver = false;
     }
@@ -62,31 +62,31 @@ public class FourInARowProcessor extends AbstractProcessor<FourInARowPlayer, Fou
     *   - Parse response into a move
     *   - Handle move logic
     *   - Create a new State and return it.
-    *   returns: FourInARowState
+    *   returns: ConnectfourState
     * */
     @Override
-    public FourInARowState playRound(int roundNumber, FourInARowState state) {
+    public ConnectfourState playRound(int roundNumber, ConnectfourState state) {
         this.roundNumber = roundNumber;
 
-        ArrayList<FourInARowMove> moves = new ArrayList();
+        ArrayList<ConnectfourMove> moves = new ArrayList();
 
         int moveNumber = (roundNumber-1)*this.players.size()+1;
 
-        FourInARowState nextState = state;
+        ConnectfourState nextState = state;
 
-        for (FourInARowPlayer player : this.players) {
+        for (ConnectfourPlayer player : this.players) {
             if (!hasGameEnded(nextState)) {
-                nextState = new FourInARowState(nextState, moves, roundNumber);
+                nextState = new ConnectfourState(nextState, moves, roundNumber);
 
                 LOGGER.info(String.format("Playing round %d, move %d", roundNumber, moveNumber));
 
                 String response = player.requestMove(ActionType.MOVE.toString());
 
                 // parse the response
-                FourInARowMoveDeserializer deserializer = new FourInARowMoveDeserializer(player);
-                FourInARowMove move = deserializer.traverse(response);
+                ConnectfourMoveDeserializer deserializer = new ConnectfourMoveDeserializer(player);
+                ConnectfourMove move = deserializer.traverse(response);
 
-                FourInARowLogic l = new FourInARowLogic();
+                ConnectfourLogic l = new ConnectfourLogic();
 
                 try {
                     nextState = l.transformBoard(nextState, move, this.players);
@@ -121,7 +121,7 @@ public class FourInARowProcessor extends AbstractProcessor<FourInARowPlayer, Fou
         return nextState;
     }
 
-    private int getNextPlayerId(FourInARowPlayer p) {
+    private int getNextPlayerId(ConnectfourPlayer p) {
         return (p.getId() == 1) ? 2 : 1;
     }
 
@@ -129,7 +129,7 @@ public class FourInARowProcessor extends AbstractProcessor<FourInARowPlayer, Fou
     *  returns: boolean
     * */
     @Override
-    public boolean hasGameEnded(FourInARowState state) {
+    public boolean hasGameEnded(ConnectfourState state) {
         boolean returnVal = false;
         if (roundNumber > 30) returnVal = true;
         checkWinner(state);
@@ -141,16 +141,16 @@ public class FourInARowProcessor extends AbstractProcessor<FourInARowPlayer, Fou
     *  returns: if there is a winner, the winning Player, otherwise return null.
     *  */
     @Override
-    public FourInARowPlayer getWinner() {
+    public ConnectfourPlayer getWinner() {
         return this.winner;
     }
 
-    public void checkWinner(FourInARowState s) {
+    public void checkWinner(ConnectfourState s) {
         this.winner = null;
         s.getBoard().updateMacroboard();
         int winner = s.getBoard().getMacroboardWinner();
         if (winner != 0) {
-            for (FourInARowPlayer player : this.players) {
+            for (ConnectfourPlayer player : this.players) {
                 if (player.getId() == winner) {
                     this.winner = player;
                 }

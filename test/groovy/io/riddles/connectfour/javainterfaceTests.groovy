@@ -1,4 +1,4 @@
-package io.riddles.fourinarownew
+package io.riddles.connectfour
 
 import spock.lang.Specification
 
