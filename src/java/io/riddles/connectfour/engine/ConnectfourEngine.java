@@ -68,7 +68,7 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
     @Override
     protected ConnectfourState getInitialState() {
         ConnectfourState s = new ConnectfourState();
-        s.setBoard(new Board(7,6));
+        s.setBoard(new Board(configuration.getInt("fieldWidth"), configuration.getInt("fieldHeight")));
         return s;
     }
 }

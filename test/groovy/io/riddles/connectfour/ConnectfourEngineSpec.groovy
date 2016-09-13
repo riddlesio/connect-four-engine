@@ -22,6 +22,7 @@ package io.riddles.connectfour
 import io.riddles.connectfour.engine.ConnectfourEngine
 import io.riddles.javainterface.io.IOHandler
 import io.riddles.connectfour.game.state.ConnectfourState
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -57,8 +58,8 @@ class ConnectfourEngineSpec extends Specification {
         }
     }
 
-
-    def "test if FourInARowEngine is created"() {
+    //@Ignore
+    def "test if ConnectfourEngine is created"() {
         println("test if ConnectfourEngine is created")
 
         setup:
@@ -73,5 +74,149 @@ class ConnectfourEngineSpec extends Specification {
 
         expect:
         engine.finalState instanceof ConnectfourState;
+    }
+
+    //@Ignore
+    def "Test horizontal player 1 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_hor_p1win.txt"
+        botInputs[1] = "./test/resources/bot2_input_hor_p1win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 1;
+    }
+
+    //@Ignore
+    def "Test horizontal player 2 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_hor_p2win.txt"
+        botInputs[1] = "./test/resources/bot2_input_hor_p2win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 2;
+    }
+
+    //@Ignore
+    def "Test vertical player 1 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_ver_p1win.txt"
+        botInputs[1] = "./test/resources/bot2_input_ver_p1win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 1;
+    }
+
+    //@Ignore
+    def "Test vertical player 2 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_ver_p2win.txt"
+        botInputs[1] = "./test/resources/bot2_input_ver_p2win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 2;
+    }
+
+    //@Ignore
+    def "Test diagonal player 1 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_dia_p1win.txt"
+        botInputs[1] = "./test/resources/bot2_input_dia_p1win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 1;
+    }
+
+    //@Ignore
+    def "Test diagonal player 2 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_dia_p2win.txt"
+        botInputs[1] = "./test/resources/bot2_input_dia_p2win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 2;
+    }
+
+    //@Ignore
+    def "Test counter diagonal player 1 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_cdia_p1win.txt"
+        botInputs[1] = "./test/resources/bot2_input_cdia_p1win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 1;
+    }
+
+    //@Ignore
+    def "Test counter diagonal player 2 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_cdia_p2win.txt"
+        botInputs[1] = "./test/resources/bot2_input_cdia_p2win.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner().getId() == 2;
     }
 }

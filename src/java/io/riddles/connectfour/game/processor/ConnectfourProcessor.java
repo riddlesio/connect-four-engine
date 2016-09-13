@@ -106,6 +106,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
                     this.gameOver = true;
                 }
                 nextBoard.dump();
+                checkWinner(nextState);
             }
         }
 
@@ -125,6 +126,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
     public boolean hasGameEnded(ConnectfourState state) {
         boolean returnVal = false;
         if (this.roundNumber >= ConnectfourEngine.configuration.getInt("maxRounds")) returnVal = true;
+        if (state.getBoard().getNrAvailableFields() == 0) returnVal = true;
         if (getWinner() != null) returnVal = true;
         return returnVal;
     }
@@ -136,6 +138,19 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
     @Override
     public ConnectfourPlayer getWinner() {
         return this.winner;
+    }
+
+    /**
+     * Returns the winner of the game, if there is one.
+     * @return null if there is no winner, a ConnectfourPlayer otherwise
+     */
+    public void checkWinner(ConnectfourState state) {
+        int playerId = logic.getWinner(state.getBoard(), 4);
+        for (ConnectfourPlayer player : this.players) {
+            if (player.getId() == playerId) {
+                this.winner = player;
+            }
+        }
     }
 
     /**
