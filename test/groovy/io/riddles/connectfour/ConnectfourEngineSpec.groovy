@@ -55,13 +55,6 @@ class ConnectfourEngineSpec extends Specification {
             this.finalState = finalState;
             super.finish(finalState);
         }
-
-        @Override
-        protected ConnectfourState getInitialState() {
-            return super.getInitialState();
-            //ConnectfourState s = new ConnectfourState();
-            //return s;
-        }
     }
 
 

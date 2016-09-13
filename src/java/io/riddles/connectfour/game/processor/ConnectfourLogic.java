@@ -1,13 +1,12 @@
 package io.riddles.connectfour.game.processor;
 
+import io.riddles.connectfour.game.board.Board;
 import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.connectfour.game.state.ConnectfourState;
 import io.riddles.javainterface.exception.InvalidInputException;
-import io.riddles.connectfour.game.data.Coordinate;
-import io.riddles.connectfour.game.data.ConnectfourBoard;
 import io.riddles.connectfour.game.move.ConnectfourMove;
 
-import java.util.ArrayList;
+import java.awt.*;
 
 /**
  * Created by joost on 3-7-16.
@@ -18,34 +17,43 @@ public class ConnectfourLogic {
     public ConnectfourLogic() {
     }
 
-    public ConnectfourState transformBoard(ConnectfourState state, ConnectfourMove move, ArrayList<ConnectfourPlayer> players) throws InvalidInputException {
+    /**
+     * Takes a LightridersState and transforms it with a LightridersMove.
+     *
+     * Return
+     * Returns nothing, but transforms the given LightridersState.
+     * @param ConnectfourState The initial state
+     * @param ConnectfourPlayer The player involved
+     * @param ConnectfourMove The move of the player
+     * @return
+     */
+    public void transform(ConnectfourState state, ConnectfourMove move) throws InvalidInputException {
 
         if (move.getException() == null) {
-            transformMoveLocation(state, move, players);
-        } else {
+            transformMove(state, move);
         }
-        return state;
     }
 
 
-    private void transformMoveLocation(ConnectfourState state, ConnectfourMove move, ArrayList<ConnectfourPlayer> players) {
+    private void transformMove(ConnectfourState state, ConnectfourMove move) {
         ConnectfourPlayer p = move.getPlayer();
-        ConnectfourBoard board = state.getBoard();
+        Board board = state.getBoard();
 
         int pId = p.getId();
 
-        Coordinate c = move.getCoordinate();
+        int c = move.getColumn();
 
-        if (c.getX() < board.getWidth() && c.getX() >= 0) { /* Move within range */
+        if (c < board.getWidth() && c  >= 0) { /* Move within range */
             for (int y = board.getHeight()-1; y >= 0; y--) { // From bottom column up
-                Coordinate tmpC = new Coordinate(c.getX(),y);
-                if (board.getFieldAt(tmpC) == 0) {
-                    board.setFieldAt(tmpC, pId);
+                Point tmpC = new Point(c,y);
+                if (board.getFieldAt(tmpC).equals("0")) {
+                    board.setFieldAt(tmpC, String.valueOf(pId));
+                    return;
                 }
             }
-            move.setException(new InvalidInputException("Column " + c.getX() + " is full"));
+            move.setException(new InvalidInputException("Column " + c + " is full"));
         } else {
-            move.setException(new InvalidInputException("Move out of bounds. (" + c.getX() + ")"));
+            move.setException(new InvalidInputException("Move out of bounds. (" + c + ")"));
         }
     }
 }

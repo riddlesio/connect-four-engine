@@ -21,6 +21,8 @@ package io.riddles.connectfour.game.processor;
 
 import java.util.ArrayList;
 
+import io.riddles.connectfour.engine.ConnectfourEngine;
+import io.riddles.connectfour.game.board.Board;
 import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.javainterface.game.processor.AbstractProcessor;
 import io.riddles.connectfour.game.move.*;
@@ -41,12 +43,14 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
     private int roundNumber;
     private boolean gameOver;
     private ConnectfourPlayer winner;
+    private ConnectfourLogic logic;
 
 
     /* Constructor */
     public ConnectfourProcessor(ArrayList<ConnectfourPlayer> players) {
         super(players);
         this.gameOver = false;
+        this.logic = new ConnectfourLogic();
     }
 
     /* preGamePhase may be used to set up the Processor before starting the game loop.
@@ -56,67 +60,54 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
 
     }
 
-    /* playRound is called every cycle of SimpleGameLoop. It should:
-    *   - Take a State
-    *   - Ask players for response
-    *   - Parse response into a move
-    *   - Handle move logic
-    *   - Create a new State and return it.
-    *   returns: ConnectfourState
-    * */
+    /**
+     * Play one round of the game. It takes a LightridersState,
+     * asks all living players for a response and delivers a new LightridersState.
+     *
+     * Return
+     * the LightridersState that will be the state for the next round.
+     * @param roundNumber The current round number
+     * @param ConnectfourState The current state
+     * @return The LightridersState that will be the start of the next round
+     */
     @Override
     public ConnectfourState playRound(int roundNumber, ConnectfourState state) {
+        LOGGER.info(String.format("Playing round %d", roundNumber));
         this.roundNumber = roundNumber;
 
-        ArrayList<ConnectfourMove> moves = new ArrayList();
-
-        int moveNumber = (roundNumber-1)*this.players.size()+1;
-
+        ConnectfourLogic logic = new ConnectfourLogic();
         ConnectfourState nextState = state;
 
         for (ConnectfourPlayer player : this.players) {
             if (!hasGameEnded(nextState)) {
-                nextState = new ConnectfourState(nextState, moves, roundNumber);
+                nextState = new ConnectfourState(nextState, new ArrayList<>(), roundNumber);
+                Board nextBoard = nextState.getBoard();
 
-                LOGGER.info(String.format("Playing round %d, move %d", roundNumber, moveNumber));
-
+                player.sendUpdate("field", player, nextBoard.toString());
                 String response = player.requestMove(ActionType.MOVE.toString());
 
                 // parse the response
                 ConnectfourMoveDeserializer deserializer = new ConnectfourMoveDeserializer(player);
                 ConnectfourMove move = deserializer.traverse(response);
 
-                ConnectfourLogic l = new ConnectfourLogic();
+
+
+                // create the next move
+                nextState.getMoves().add(move);
 
                 try {
-                    nextState = l.transformBoard(nextState, move, this.players);
+                    logic.transform(nextState, move);
                 } catch (Exception e) {
-                    LOGGER.info(e.toString());
+                    LOGGER.info(String.format("Unknown response: %s", response));
                 }
-
-                //if (move.getException() != null) System.out.println(move.getException());
-
-                // create the next state
-                moves.add(move);
 
                 // stop game if bot returns nothing
                 if (response == null) {
                     this.gameOver = true;
                 }
-
-                nextState.setMoveNumber(moveNumber);
-                int nextPlayer = getNextPlayerId(player);
-                nextState.setFieldPresentationString(nextState.getBoard().toPresentationString(nextPlayer, false));
-                nextState.setPossibleMovesPresentationString(nextState.getBoard().toPresentationString(nextPlayer, true));
-
-                //nextState.getBoard().dump();
-                //nextState.getBoard().dumpMacroboard();
-                checkWinner(nextState);
-                moveNumber++;
+                nextBoard.dump();
             }
-
         }
-
 
         return nextState;
     }
@@ -125,42 +116,32 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
         return (p.getId() == 1) ? 2 : 1;
     }
 
-    /* hasGameEnded should check all conditions on which a game should end
-    *  returns: boolean
-    * */
+    /**
+     * The stopping condition for this game.
+     * @param ConnectfourState the state to determine whether the game has ended.
+     * @return True if the game is over, false otherwise
+     */
     @Override
     public boolean hasGameEnded(ConnectfourState state) {
         boolean returnVal = false;
-        if (roundNumber > 30) returnVal = true;
-        checkWinner(state);
-        if (this.winner != null) returnVal = true;
+        if (this.roundNumber >= ConnectfourEngine.configuration.getInt("maxRounds")) returnVal = true;
+        if (getWinner() != null) returnVal = true;
         return returnVal;
     }
 
-    /* getWinner should check if there is a winner.
-    *  returns: if there is a winner, the winning Player, otherwise return null.
-    *  */
+    /**
+     * Returns the winner of the game, if there is one.
+     * @return null if there is no winner, a ConnectfourPlayer otherwise
+     */
     @Override
     public ConnectfourPlayer getWinner() {
         return this.winner;
     }
 
-    public void checkWinner(ConnectfourState s) {
-        this.winner = null;
-        s.getBoard().updateMacroboard();
-        int winner = s.getBoard().getMacroboardWinner();
-        if (winner != 0) {
-            for (ConnectfourPlayer player : this.players) {
-                if (player.getId() == winner) {
-                    this.winner = player;
-                }
-            }
-        }
-    }
-
-    /* getScore should return the game score if applicable.
-    *  returns: double Score
-    *  */
+    /**
+     * GetScore isn't used in Lightriders.
+     * @return always return 0.
+     */
     @Override
     public double getScore() {
         return 0;

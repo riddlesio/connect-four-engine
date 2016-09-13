@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import io.riddles.javainterface.game.state.AbstractStateSerializer;
 
 /**
- * ConnectfourSerializer takes a ConnectfourState and serialises it into a String.
+ * ConnectfourSerializer takes a ConnectfourState and serialises it into a String or JSONObject.
  *
  * @author jim
  */
@@ -32,19 +32,15 @@ public class ConnectfourSerializer extends AbstractStateSerializer<ConnectfourSt
 
     @Override
     public String traverseToString(ConnectfourState state) {
-        return visitState(state, false).toString();
+        return visitState(state).toString();
     }
 
     @Override
     public JSONObject traverseToJson(ConnectfourState state) throws NullPointerException {
-        return visitState(state, false);
+        return visitState(state);
     }
 
-    public JSONObject traverseToJson(ConnectfourState state, Boolean showPossibleMoves) throws NullPointerException {
-        return visitState(state, showPossibleMoves);
-    }
-
-    private JSONObject visitState(ConnectfourState state, Boolean showPossibleMoves) throws NullPointerException {
+    private JSONObject visitState(ConnectfourState state) throws NullPointerException {
         JSONObject stateJson = new JSONObject();
         stateJson.put("move", state.getMoveNumber());
 
@@ -53,11 +49,7 @@ public class ConnectfourSerializer extends AbstractStateSerializer<ConnectfourSt
         stateJson.put("movetype", move.getMoveType());
         stateJson.put("winner", ""); /* TODO: find a winner */
 
-        if (showPossibleMoves) {
-            stateJson.put("field", state.getPossibleMovesPresentationString());
-        } else {
-            stateJson.put("field", state.getFieldPresentationString());
-        }
+        stateJson.put("field", state.toString());
         stateJson.put("move", state.getMoveNumber());
 
         if (move.getException() == null) {

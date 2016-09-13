@@ -19,8 +19,6 @@
 
 package io.riddles.connectfour.game.move;
 
-import io.riddles.connectfour.game.data.Coordinate;
-import io.riddles.connectfour.game.data.MoveType;
 import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.javainterface.exception.InvalidInputException;
 import io.riddles.javainterface.serialize.Deserializer;
@@ -63,14 +61,13 @@ public class ConnectfourMoveDeserializer implements Deserializer<ConnectfourMove
         }
         MoveType type = visitAssessment(split[0]);
         int column = Integer.parseInt(split[1]);
-        Coordinate c = new Coordinate(column, 0);
-        return new ConnectfourMove(this.player, c);
+        return new ConnectfourMove(this.player, column, type);
     }
 
     public MoveType visitAssessment(String input) throws InvalidInputException {
         switch (input) {
             case "place_disc":
-                return MoveType.PLACEMOVE;
+                return MoveType.PLACEDISC;
             default:
                 throw new InvalidInputException("Move isn't valid");
         }

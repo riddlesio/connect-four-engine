@@ -49,8 +49,7 @@ public class ConnectfourSerializer extends
         while (state.hasNextState()) {
             state = (ConnectfourState) state.getNextState();
 
-            states.put(serializer.traverseToJson(state, true));
-            states.put(serializer.traverseToJson(state, false));
+            states.put(serializer.traverseToJson(state));
         }
 
         JSONObject matchdata = new JSONObject();
@@ -112,7 +111,7 @@ public class ConnectfourSerializer extends
             JSONObject p = new JSONObject();
 
             p.put("name", player.getName());
-            p.put("emailHash", player.getEmail());
+            //p.put("emailHash", player.getEmail());
             playerData.put(p);
         }
 

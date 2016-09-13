@@ -17,9 +17,7 @@
  *     file that was distributed with this source code.
  */
 
-package io.riddles.connectfour.game.player;
-
-import io.riddles.javainterface.game.player.AbstractPlayer;
+package io.riddles.connectfour.game.move;
 
 /**
  * ${PACKAGE_NAME}
@@ -32,15 +30,11 @@ import io.riddles.javainterface.game.player.AbstractPlayer;
  * @author Niko
  */
 
+public enum MoveType {
+    PLACEDISC;
 
-public class ConnectfourPlayer extends AbstractPlayer {
-
-    public ConnectfourPlayer(int id) {
-        super(id);
-    }
-
+    @Override
     public String toString() {
-        return "ConnectfourPlayer " + this.getId();
+        return this.name().toLowerCase();
     }
-
 }

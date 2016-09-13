@@ -1,7 +1,7 @@
 package io.riddles.connectfour.engine;
 
 import io.riddles.connectfour.game.ConnectfourSerializer;
-import io.riddles.connectfour.game.data.ConnectfourBoard;
+import io.riddles.connectfour.game.board.Board;
 import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.connectfour.game.processor.ConnectfourProcessor;
 import io.riddles.connectfour.game.state.ConnectfourState;
@@ -68,32 +68,7 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
     @Override
     protected ConnectfourState getInitialState() {
         ConnectfourState s = new ConnectfourState();
-        s.setBoard(new ConnectfourBoard(9,9));
+        s.setBoard(new Board(7,6));
         return s;
-    }
-
-
-    /* parseSetupInput parses setup input received from the server.
-     * returns:
-     */
-    @Override
-    protected void parseSetupInput(String input) {
-        String[] split = input.split(" ");
-        String command = split[0];
-        if (command.equals("bot_ids")) {
-            String[] ids = split[1].split(",");
-            for (int i = 0; i < ids.length; i++) {
-                ConnectfourPlayer player = createPlayer(Integer.parseInt(ids[i]));
-
-                if (this.botInputFiles != null)
-                    player.setInputFile(this.botInputFiles[i]);
-                this.players.add(player);
-            }
-        } else if (command.equals("bot_emails")) {
-            String[] emails = split[1].split(",");
-            for (int i = 0; i < emails.length; i++) {
-                this.players.get(i).setEmail(emails[i]);
-            }
-        }
     }
 }

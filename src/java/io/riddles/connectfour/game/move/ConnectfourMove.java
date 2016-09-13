@@ -19,8 +19,6 @@
 
 package io.riddles.connectfour.game.move;
 
-import io.riddles.connectfour.game.data.Coordinate;
-import io.riddles.connectfour.game.data.MoveType;
 import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.javainterface.exception.InvalidInputException;
 import io.riddles.javainterface.game.move.AbstractMove;
@@ -40,12 +38,12 @@ import io.riddles.javainterface.game.move.AbstractMove;
 public class ConnectfourMove extends AbstractMove<ConnectfourPlayer> {
 
     private MoveType type;
-    private Coordinate coordinate;
+    private int column;
 
-    public ConnectfourMove(ConnectfourPlayer player, Coordinate c) {
+    public ConnectfourMove(ConnectfourPlayer player, int c, MoveType type) {
         super(player);
-        coordinate = c;
-
+        this.column = c;
+        this.type = type;
     }
 
     public ConnectfourMove(ConnectfourPlayer player, InvalidInputException exception) {
@@ -56,8 +54,5 @@ public class ConnectfourMove extends AbstractMove<ConnectfourPlayer> {
         return this.type;
     }
 
-    public Coordinate getCoordinate() { return this.coordinate; }
-
-
-
+    public int getColumn() { return this.column; }
 }

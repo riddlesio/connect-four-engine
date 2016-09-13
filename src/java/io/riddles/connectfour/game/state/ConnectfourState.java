@@ -19,8 +19,8 @@
 
 package io.riddles.connectfour.game.state;
 
+import io.riddles.connectfour.game.board.Board;
 import io.riddles.javainterface.game.state.AbstractState;
-import io.riddles.connectfour.game.data.ConnectfourBoard;
 import io.riddles.connectfour.game.move.ConnectfourMove;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  */
 public class ConnectfourState extends AbstractState<ConnectfourMove> {
 
-    private ConnectfourBoard board;
+    private Board board;
     private String errorMessage;
     private String mPossibleMovesString, mFieldPresentationString;
     private int moveNumber;
@@ -45,37 +45,29 @@ public class ConnectfourState extends AbstractState<ConnectfourMove> {
         super();
     }
 
-    public ConnectfourState(ConnectfourState previousState, ConnectfourMove move, int roundNumber, String possibleMovesString, String fieldPresentationString) {
+    public ConnectfourState(ConnectfourState previousState, ConnectfourMove move, int roundNumber) {
         super(previousState, move, roundNumber);
-        this.mPossibleMovesString = possibleMovesString;
-        this.mFieldPresentationString = fieldPresentationString;
-        this.board = previousState.getBoard();
+        this.board = new Board(
+                board.getWidth(),
+                board.getHeight(),
+                board.toString());
     }
 
     public ConnectfourState(ConnectfourState previousState, ArrayList<ConnectfourMove> moves, int roundNumber) {
         super(previousState, moves, roundNumber);
-        this.board = previousState.getBoard();
+        this.board = new Board(
+                previousState.getBoard().getWidth(),
+                previousState.getBoard().getHeight(),
+                previousState.getBoard().toString());
     }
 
-    public ConnectfourBoard getBoard() {
+    public Board getBoard() {
         return this.board;
     }
 
-    public void setBoard(ConnectfourBoard b) {
+    public void setBoard(Board b) {
         this.board = b;
     }
-
-    public String getPossibleMovesPresentationString() {
-        return mPossibleMovesString;
-    }
-    public String getFieldPresentationString() {
-        return mFieldPresentationString;
-    }
-
-    public void setPossibleMovesPresentationString(String s) {
-        this.mPossibleMovesString = s;
-    }
-    public void setFieldPresentationString(String s) { this.mFieldPresentationString = s; }
 
     public void setMoveNumber(int n) { this.moveNumber = n; }
     public int getMoveNumber() { return this.moveNumber; }
