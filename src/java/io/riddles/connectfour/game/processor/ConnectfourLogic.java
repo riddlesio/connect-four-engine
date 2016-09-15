@@ -23,7 +23,6 @@ public class ConnectfourLogic {
      * Return
      * Returns nothing, but transforms the given ConnectfourState.
      * @param ConnectfourState The initial state
-     * @param ConnectfourPlayer The player involved
      * @param ConnectfourMove The move of the player
      * @return
      */
@@ -34,7 +33,15 @@ public class ConnectfourLogic {
         }
     }
 
-
+    /**
+     * Takes a ConnectfourState and applies the move.
+     *
+     * Return
+     * Returns nothing, but transforms the given ConnectfourState.
+     * @param ConnectfourState The initial state
+     * @param ConnectfourMove The move of the player
+     * @return
+     */
     private void transformMove(ConnectfourState state, ConnectfourMove move) {
         ConnectfourPlayer p = move.getPlayer();
         Board board = state.getBoard();

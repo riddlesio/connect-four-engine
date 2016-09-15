@@ -91,7 +91,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
                 ConnectfourMoveDeserializer deserializer = new ConnectfourMoveDeserializer(player);
                 ConnectfourMove move = deserializer.traverse(response);
 
-                // create the next move
+                // add the next move
                 nextState.getMoves().add(move);
 
                 try {
