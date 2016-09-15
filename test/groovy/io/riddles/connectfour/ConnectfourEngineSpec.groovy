@@ -254,7 +254,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.finalState instanceof ConnectfourState;
     }
 
-    //@Ignore
+    @Ignore
     def "Test garbage input"() {
 
         setup:
@@ -269,5 +269,23 @@ class ConnectfourEngineSpec extends Specification {
 
         expect:
         engine.finalState instanceof ConnectfourState;
+    }
+
+    //@Ignore
+    def "Test board full"() {
+
+        setup:
+        String[] botInputs = new String[3]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_boardfull.txt"
+        botInputs[1] = "./test/resources/bot2_input_boardfull.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+        engine.getProcessor().getWinner() == null;
     }
 }
