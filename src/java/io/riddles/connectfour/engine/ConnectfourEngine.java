@@ -22,11 +22,19 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
     public ConnectfourEngine() {
 
         super();
+        setDefaults();
     }
 
     public ConnectfourEngine(String wrapperFile, String[] botFiles) {
 
         super(wrapperFile, botFiles);
+        setDefaults();
+    }
+
+    private void setDefaults() {
+        configuration.put("maxRounds", 100);
+        configuration.put("fieldWidth", 7);
+        configuration.put("fieldHeight", 6);
     }
 
     /* createPlayer creates and initialises a Player for the game.
@@ -68,7 +76,7 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
     @Override
     protected ConnectfourState getInitialState() {
         ConnectfourState s = new ConnectfourState();
-        s.setBoard(new Board(7,6));
+        s.setBoard(new Board(configuration.getInt("fieldWidth"), configuration.getInt("fieldHeight")));
         return s;
     }
 }

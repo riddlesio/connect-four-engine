@@ -56,4 +56,100 @@ public class ConnectfourLogic {
             move.setException(new InvalidInputException("Move out of bounds. (" + c + ")"));
         }
     }
+
+
+    /**
+     * Checks if there is a winner, if so, returns player id.
+     * @param args :
+     * @return : Returns player id if there is a winner, otherwise returns 0.
+     */
+    public int getWinner(Board b, int inARow) {
+        /* Check for horizontal wins */
+        for (int x = 0; x < b.getWidth(); x++) {
+            for (int y = 0; y < b.getHeight(); y++) {
+                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                Boolean win = true;
+                if (n != 0) {
+                    for (int i = 0; i < inARow; i++) {
+                        if (x + i < b.getWidth()) {
+                            if (n != Integer.parseInt(b.getFieldAt(new Point(x + i, y)))) {
+                                win = false;
+                            }
+                        } else {
+                            win = false;
+                        }
+                    }
+                    if (win) {
+                        return n;
+                    }
+                }
+            }
+        }
+
+        /* Check for vertical wins */
+        for (int x = 0; x < b.getWidth(); x++) {
+            for (int y = 0; y < b.getHeight(); y++) {
+                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                Boolean win = true;
+                if (n != 0) {
+                    for (int i = 0; i < inARow; i++) {
+                        if (y + i < b.getHeight()) {
+                            if (n != Integer.parseInt(b.getFieldAt(new Point(x, y + i)))) {
+                                win = false;
+                            }
+                        } else {
+                            win = false;
+                        }
+                    }
+                    if (win) {
+                        return n;
+                    }
+                }
+            }
+        }
+
+        /* Check for diagonal wins */
+        for (int x = 0; x < b.getWidth(); x++) {
+            for (int y = 0; y < b.getHeight(); y++) {
+                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                Boolean win = true;
+                if (n != 0) {
+                    for (int i = 0; i < inARow; i++) {
+                        if (x - i >= 0 && y + i < b.getHeight()) {
+                            if (n != Integer.parseInt(b.getFieldAt(new Point(x - i, y + i)))) {
+                                win = false;
+                            }
+                        } else {
+                            win = false;
+                        }
+                    }
+                    if (win) {
+                        return n;
+                    }
+                }
+            }
+        }
+        /* Check for anti diagonal wins */
+        for (int x = 0; x < b.getWidth(); x++) {
+            for (int y = 0; y < b.getHeight(); y++) {
+                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                Boolean win = true;
+                if (n != 0) {
+                    for (int i = 0; i < inARow; i++) {
+                        if (x + i < b.getWidth() && y + i < b.getHeight()) {
+                            if (n != Integer.parseInt(b.getFieldAt(new Point(x + i, y + i)))) {
+                                win = false;
+                            }
+                        } else {
+                            win = false;
+                        }
+                    }
+                    if (win) {
+                        return n;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 }

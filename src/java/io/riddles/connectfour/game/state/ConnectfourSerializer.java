@@ -49,7 +49,7 @@ public class ConnectfourSerializer extends AbstractStateSerializer<ConnectfourSt
         stateJson.put("movetype", move.getMoveType());
         stateJson.put("winner", ""); /* TODO: find a winner */
 
-        stateJson.put("field", state.toString());
+        stateJson.put("field", state.getBoard().toString());
         stateJson.put("move", state.getMoveNumber());
 
         if (move.getException() == null) {

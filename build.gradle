@@ -1,8 +1,9 @@
-group 'io.riddles'
-version '1.0-SNAPSHOT'
-
 apply plugin: 'groovy'
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'io.riddles.connectfour.Connectfour'
+version = '1.0.0'
 
 sourceCompatibility = 1.8
 
@@ -17,6 +18,18 @@ sourceSets {
         groovy {
             srcDir 'test/groovy'
         }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Connect Four Game Engine',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 

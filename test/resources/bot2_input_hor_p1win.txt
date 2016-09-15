@@ -1,0 +1,5 @@
+place_disc 5
+place_disc 6
+place_disc 5
+place_disc 1
+place_disc 0
