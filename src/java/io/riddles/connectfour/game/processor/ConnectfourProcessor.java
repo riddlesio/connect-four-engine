@@ -61,14 +61,14 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
     }
 
     /**
-     * Play one round of the game. It takes a LightridersState,
-     * asks all living players for a response and delivers a new LightridersState.
+     * Play one round of the game. It takes a ConnectfourState,
+     * asks all living players for a response and delivers a new ConnectfourState.
      *
      * Return
-     * the LightridersState that will be the state for the next round.
+     * the ConnectfourState that will be the state for the next round.
      * @param roundNumber The current round number
      * @param ConnectfourState The current state
-     * @return The LightridersState that will be the start of the next round
+     * @return The ConnectfourState that will be the start of the next round
      */
     @Override
     public ConnectfourState playRound(int roundNumber, ConnectfourState state) {
@@ -154,7 +154,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
     }
 
     /**
-     * GetScore isn't used in Lightriders.
+     * GetScore isn't used in Connectfour.
      * @return always return 0.
      */
     @Override

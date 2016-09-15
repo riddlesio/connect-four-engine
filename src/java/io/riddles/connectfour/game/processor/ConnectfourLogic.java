@@ -18,10 +18,10 @@ public class ConnectfourLogic {
     }
 
     /**
-     * Takes a LightridersState and transforms it with a LightridersMove.
+     * Takes a ConnectfourState and transforms it with a ConnectfourMove.
      *
      * Return
-     * Returns nothing, but transforms the given LightridersState.
+     * Returns nothing, but transforms the given ConnectfourState.
      * @param ConnectfourState The initial state
      * @param ConnectfourPlayer The player involved
      * @param ConnectfourMove The move of the player

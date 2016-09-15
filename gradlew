@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 apply plugin: 'application'
 
 // Include dependent libraries in archive.
-mainClassName = 'io.riddles.lightriders.Lightriders'
+mainClassName = 'io.riddles.connectfour.Connectfour'
 
 sourceCompatibility = 1.8
 version = '1.0.0'
@@ -32,7 +32,7 @@ sourceSets {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Lightriders Game Engine',
+        attributes 'Implementation-Title': 'Connectfour Game Engine',
                 'Implementation-Version': version,
                 'Main-Class': mainClassName
     }
