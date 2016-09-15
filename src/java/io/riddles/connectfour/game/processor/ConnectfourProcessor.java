@@ -75,7 +75,6 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
         LOGGER.info(String.format("Playing round %d", roundNumber));
         this.roundNumber = roundNumber;
 
-        ConnectfourLogic logic = new ConnectfourLogic();
         ConnectfourState nextState = state;
 
         int playerCounter = 0;
@@ -91,8 +90,6 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
                 // parse the response
                 ConnectfourMoveDeserializer deserializer = new ConnectfourMoveDeserializer(player);
                 ConnectfourMove move = deserializer.traverse(response);
-
-
 
                 // create the next move
                 nextState.getMoves().add(move);
