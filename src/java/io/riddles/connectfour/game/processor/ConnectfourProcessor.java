@@ -78,9 +78,11 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
         ConnectfourLogic logic = new ConnectfourLogic();
         ConnectfourState nextState = state;
 
+        int playerCounter = 0;
         for (ConnectfourPlayer player : this.players) {
             if (!hasGameEnded(nextState)) {
                 nextState = new ConnectfourState(nextState, new ArrayList<>(), roundNumber);
+                nextState.setMoveNumber(roundNumber*2 + playerCounter - 1);
                 Board nextBoard = nextState.getBoard();
 
                 player.sendUpdate("field", player, nextBoard.toString());
@@ -107,6 +109,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
                 }
                 //nextBoard.dump();
                 checkWinner(nextState);
+                playerCounter++;
             }
         }
 
