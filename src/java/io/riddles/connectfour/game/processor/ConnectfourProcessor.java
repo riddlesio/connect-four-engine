@@ -105,7 +105,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
                 if (response == null) {
                     this.gameOver = true;
                 }
-                nextBoard.dump();
+                //nextBoard.dump();
                 checkWinner(nextState);
             }
         }

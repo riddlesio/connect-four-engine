@@ -58,7 +58,7 @@ class ConnectfourEngineSpec extends Specification {
         }
     }
 
-    //@Ignore
+    @Ignore
     def "test if ConnectfourEngine is created"() {
         println("test if ConnectfourEngine is created")
 
@@ -76,7 +76,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.finalState instanceof ConnectfourState;
     }
 
-    //@Ignore
+    @Ignore
     def "Test horizontal player 1 win"() {
 
         setup:
@@ -94,7 +94,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    //@Ignore
+    @Ignore
     def "Test horizontal player 2 win"() {
 
         setup:
@@ -112,7 +112,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 2;
     }
 
-    //@Ignore
+    @Ignore
     def "Test vertical player 1 win"() {
 
         setup:
@@ -130,7 +130,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    //@Ignore
+    @Ignore
     def "Test vertical player 2 win"() {
 
         setup:
@@ -148,7 +148,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 2;
     }
 
-    //@Ignore
+    @Ignore
     def "Test diagonal player 1 win"() {
 
         setup:
@@ -166,7 +166,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    //@Ignore
+    @Ignore
     def "Test diagonal player 2 win"() {
 
         setup:
@@ -184,7 +184,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 2;
     }
 
-    //@Ignore
+    @Ignore
     def "Test counter diagonal player 1 win"() {
 
         setup:
@@ -202,7 +202,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    //@Ignore
+    @Ignore
     def "Test counter diagonal player 2 win"() {
 
         setup:
@@ -218,5 +218,56 @@ class ConnectfourEngineSpec extends Specification {
         expect:
         engine.finalState instanceof ConnectfourState;
         engine.getProcessor().getWinner().getId() == 2;
+    }
+
+    @Ignore
+    def "Test column overflow"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_overflow.txt"
+        botInputs[1] = "./test/resources/bot2_input_overflow.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+    }
+
+    @Ignore
+    def "Test column out of bounds"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot_input_outofbounds.txt"
+        botInputs[1] = "./test/resources/bot2_input_overflow.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
+    }
+
+    //@Ignore
+    def "Test garbage input"() {
+
+        setup:
+        String[] botInputs = new String[3]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot_input_garbage.txt"
+        botInputs[1] = "./test/resources/bot2_input_overflow.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof ConnectfourState;
     }
 }
