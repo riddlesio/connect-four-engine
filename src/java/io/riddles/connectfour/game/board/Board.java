@@ -14,6 +14,7 @@ public class Board {
     protected String[][] field;
     protected int width = 20;
     protected int height = 11;
+    public static final String EMPTY_FIELD = "0";
 
 
     public Board(int width, int height) {
@@ -44,7 +45,7 @@ public class Board {
     public void clear() {
         for (int y = 0; y < this.height; y++)
             for (int x = 0; x < this.width; x++)
-                field[x][y] = "0";
+                field[x][y] = EMPTY_FIELD;
     }
 
     protected Board(int width, int height, String[][] field) {
@@ -92,7 +93,7 @@ public class Board {
         int availableFields = 0;
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
-                if(field[x][y].equals("0")) {
+                if(field[x][y].equals(EMPTY_FIELD)) {
                     availableFields++;
                 }
             }

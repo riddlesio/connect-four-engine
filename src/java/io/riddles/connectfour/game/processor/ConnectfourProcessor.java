@@ -120,7 +120,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
     /**
      * The stopping condition for this game.
      * @param ConnectfourState the state to determine whether the game has ended.
-     * @return True if the game is over, false otherwise
+     * @return boolean True if the game is over, false otherwise
      */
     @Override
     public boolean hasGameEnded(ConnectfourState state) {
@@ -128,6 +128,7 @@ public class ConnectfourProcessor extends AbstractProcessor<ConnectfourPlayer, C
         if (this.roundNumber >= ConnectfourEngine.configuration.getInt("maxRounds")) returnVal = true;
         if (state.getBoard().getNrAvailableFields() == 0) returnVal = true;
         if (getWinner() != null) returnVal = true;
+
         return returnVal;
     }
 

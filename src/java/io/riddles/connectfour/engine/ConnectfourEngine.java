@@ -6,6 +6,7 @@ import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.connectfour.game.processor.ConnectfourProcessor;
 import io.riddles.connectfour.game.state.ConnectfourState;
 import io.riddles.javainterface.engine.AbstractEngine;
+import io.riddles.javainterface.exception.TerminalException;
 
 /**
  * ConnectfourEngine:
@@ -19,17 +20,22 @@ import io.riddles.javainterface.engine.AbstractEngine;
  */
 public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, ConnectfourPlayer, ConnectfourState> {
 
-    public ConnectfourEngine() {
+    public ConnectfourEngine() throws TerminalException {
 
-        super();
+        super(new String[0]);
         setDefaults();
     }
 
-    public ConnectfourEngine(String wrapperFile, String[] botFiles) {
+    public ConnectfourEngine(String args[]) throws TerminalException {
+        super(args);
+        setDefaults();
+    }
 
+    public ConnectfourEngine(String wrapperFile, String[] botFiles) throws TerminalException {
         super(wrapperFile, botFiles);
         setDefaults();
     }
+
 
     private void setDefaults() {
         configuration.put("maxRounds", 100);
@@ -51,7 +57,14 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
      */
     @Override
     protected ConnectfourProcessor createProcessor() {
+        /* We're going for one-based indexes for playerId's so we can use 0's for empty fields.
+         * This makes sure existing bots will still work with Connectfour, when used with the new wrapper.
+         */
+        for (ConnectfourPlayer player : this.players) {
+            player.setId(player.getId() + 1);
+        }
         return new ConnectfourProcessor(this.players);
+
     }
 
     /* sendGameSettings sends the game settings to a Player

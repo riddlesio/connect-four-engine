@@ -30,13 +30,9 @@ import io.riddles.javainterface.exception.TerminalException;
  */
 public class Connectfour {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ConnectfourEngine engine = new ConnectfourEngine();
 
-        try {
-            engine.run();
-        } catch (TerminalException e) {
-            System.exit(e.getStatusCode());
-        }
+        engine.run();
     }
 }

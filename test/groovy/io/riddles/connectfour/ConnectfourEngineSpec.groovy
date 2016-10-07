@@ -20,6 +20,7 @@
 package io.riddles.connectfour
 
 import io.riddles.connectfour.engine.ConnectfourEngine
+import io.riddles.javainterface.exception.TerminalException
 import io.riddles.javainterface.io.IOHandler
 import io.riddles.connectfour.game.state.ConnectfourState
 import spock.lang.Ignore
@@ -52,9 +53,27 @@ class ConnectfourEngineSpec extends Specification {
         }
 
         @Override
-        protected void finish(ConnectfourState finalState) {
-            this.finalState = finalState;
-            super.finish(finalState);
+        public void run() throws TerminalException, InterruptedException {
+            LOGGER.info("Starting...");
+
+            setup();
+
+            if (this.processor == null) {
+                throw new TerminalException("Processor has not been set");
+            }
+
+            LOGGER.info("Running pre-game phase...");
+
+            this.processor.preGamePhase();
+
+
+            LOGGER.info("Starting game loop...");
+
+            ConnectfourState initialState = getInitialState();
+            this.finalState = this.gameLoop.run(initialState, this.processor);
+
+            String playedGame = getPlayedGame(initialState);
+            this.platformHandler.finish(playedGame);
         }
     }
 
