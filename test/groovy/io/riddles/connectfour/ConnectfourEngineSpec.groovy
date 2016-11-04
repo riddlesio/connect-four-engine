@@ -273,7 +273,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.finalState instanceof ConnectfourState;
     }
 
-    @Ignore
+    //@Ignore
     def "Test garbage input"() {
 
         setup:
