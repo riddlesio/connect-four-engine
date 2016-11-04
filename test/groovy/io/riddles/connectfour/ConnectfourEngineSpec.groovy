@@ -77,7 +77,7 @@ class ConnectfourEngineSpec extends Specification {
         }
     }
 
-    @Ignore
+    //@Ignore
     def "test if ConnectfourEngine is created"() {
         println("test if ConnectfourEngine is created")
 
@@ -95,7 +95,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.finalState instanceof ConnectfourState;
     }
 
-    @Ignore
+    //@Ignore
     def "Test horizontal player 1 win"() {
 
         setup:
@@ -113,7 +113,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    @Ignore
+    //@Ignore
     def "Test horizontal player 2 win"() {
 
         setup:
@@ -131,7 +131,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 2;
     }
 
-    @Ignore
+    //@Ignore
     def "Test vertical player 1 win"() {
 
         setup:
@@ -149,7 +149,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    @Ignore
+    //@Ignore
     def "Test vertical player 2 win"() {
 
         setup:
@@ -167,7 +167,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 2;
     }
 
-    @Ignore
+    //@Ignore
     def "Test diagonal player 1 win"() {
 
         setup:
@@ -185,7 +185,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    @Ignore
+    //@Ignore
     def "Test diagonal player 2 win"() {
 
         setup:
@@ -203,7 +203,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 2;
     }
 
-    @Ignore
+    //@Ignore
     def "Test counter diagonal player 1 win"() {
 
         setup:
@@ -221,7 +221,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 1;
     }
 
-    @Ignore
+    //@Ignore
     def "Test counter diagonal player 2 win"() {
 
         setup:
@@ -239,7 +239,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.getProcessor().getWinner().getId() == 2;
     }
 
-    @Ignore
+    //@Ignore
     def "Test column overflow"() {
 
         setup:
@@ -256,7 +256,7 @@ class ConnectfourEngineSpec extends Specification {
         engine.finalState instanceof ConnectfourState;
     }
 
-    @Ignore
+    //@Ignore
     def "Test column out of bounds"() {
 
         setup:
