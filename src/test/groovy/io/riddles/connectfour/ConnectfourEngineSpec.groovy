@@ -20,9 +20,12 @@
 package io.riddles.connectfour
 
 import io.riddles.connectfour.engine.ConnectfourEngine
-import io.riddles.javainterface.exception.TerminalException
-import io.riddles.javainterface.io.IOHandler
+import io.riddles.connectfour.game.player.ConnectfourPlayer
+import io.riddles.connectfour.game.processor.ConnectfourProcessor
 import io.riddles.connectfour.game.state.ConnectfourState
+import io.riddles.javainterface.game.player.PlayerProvider
+import io.riddles.javainterface.game.state.AbstractState
+import io.riddles.javainterface.io.FileIOHandler
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -35,276 +38,44 @@ import spock.lang.Specification
 
 class ConnectfourEngineSpec extends Specification {
 
-    class TestEngine extends ConnectfourEngine {
-        protected ConnectfourState finalState = null
+    public static class TestEngine extends ConnectfourEngine {
 
-        TestEngine(IOHandler ioHandler) {
-            super();
-            this.ioHandler = ioHandler;
-        }
-
-        TestEngine(String wrapperFile, String[] botFiles) {
-            super(wrapperFile, botFiles)
-
-        }
-
-        IOHandler getIOHandler() {
-            return this.ioHandler;
-        }
-
-        @Override
-        public void run() throws TerminalException, InterruptedException {
-            LOGGER.info("Starting...");
-
-            setup();
-
-            if (this.processor == null) {
-                throw new TerminalException("Processor has not been set");
-            }
-
-            LOGGER.info("Running pre-game phase...");
-
-            this.processor.preGamePhase();
-
-
-            LOGGER.info("Starting game loop...");
-
-            ConnectfourState initialState = getInitialState();
-            this.finalState = this.gameLoop.run(initialState, this.processor);
-
-            String playedGame = getPlayedGame(initialState);
-            this.platformHandler.finish(playedGame);
+        TestEngine(PlayerProvider<ConnectfourEngine> playerProvider, String wrapperInput) {
+            super(playerProvider, null);
+            this.ioHandler = new FileIOHandler(wrapperInput);
         }
     }
 
     //@Ignore
-    def "test if ConnectfourEngine is created"() {
-        println("test if ConnectfourEngine is created")
+    def "test a standard game"() {
+        println("test a standard game")
 
         setup:
         String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input.txt"
+        botInputs[1] = "./src/test/resources/bot2_input.txt"
 
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input.txt"
-        botInputs[1] = "./test/resources/bot2_input.txt"
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
 
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
+        def engine = new TestEngine(playerProvider, wrapperInput)
 
-        expect:
-        engine.finalState instanceof ConnectfourState;
-    }
+        AbstractState state = engine.willRun()
+        state = engine.run(state);
+        /* Fast forward to final state */
+        while (state.hasNextState()) state = state.getNextState();
 
-    //@Ignore
-    def "Test horizontal player 1 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_hor_p1win.txt"
-        botInputs[1] = "./test/resources/bot2_input_hor_p1win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
+        state.getBoard().dumpBoard();
+        ConnectfourProcessor processor = engine.getProcessor();
 
         expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 1;
-    }
+        state instanceof ConnectfourState;
+        state.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,1,1,1,1,1,1,1,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,0,0,0,0,0,0,0,.,.,.,.,.,.,.,.,.,.,1,.,0,0,0,0,0,0,0,.,.,.,.,.,.,.,.,.,.,1,.,0,0,0,0,0,0,0,.,.,.,.,.,.,.,.,.,0,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.";
+        processor.getWinnerId(state) == null;
 
-    //@Ignore
-    def "Test horizontal player 2 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_hor_p2win.txt"
-        botInputs[1] = "./test/resources/bot2_input_hor_p2win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 2;
-    }
-
-    //@Ignore
-    def "Test vertical player 1 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_ver_p1win.txt"
-        botInputs[1] = "./test/resources/bot2_input_ver_p1win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 1;
-    }
-
-    //@Ignore
-    def "Test vertical player 2 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_ver_p2win.txt"
-        botInputs[1] = "./test/resources/bot2_input_ver_p2win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 2;
-    }
-
-    //@Ignore
-    def "Test diagonal player 1 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_dia_p1win.txt"
-        botInputs[1] = "./test/resources/bot2_input_dia_p1win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 1;
-    }
-
-    //@Ignore
-    def "Test diagonal player 2 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_dia_p2win.txt"
-        botInputs[1] = "./test/resources/bot2_input_dia_p2win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 2;
-    }
-
-    //@Ignore
-    def "Test counter diagonal player 1 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_cdia_p1win.txt"
-        botInputs[1] = "./test/resources/bot2_input_cdia_p1win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 1;
-    }
-
-    //@Ignore
-    def "Test counter diagonal player 2 win"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_cdia_p2win.txt"
-        botInputs[1] = "./test/resources/bot2_input_cdia_p2win.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner().getId() == 2;
-    }
-
-    //@Ignore
-    def "Test column overflow"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_overflow.txt"
-        botInputs[1] = "./test/resources/bot2_input_overflow.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-    }
-
-    //@Ignore
-    def "Test column out of bounds"() {
-
-        setup:
-        String[] botInputs = new String[2]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot_input_outofbounds.txt"
-        botInputs[1] = "./test/resources/bot2_input_overflow.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-    }
-
-    //@Ignore
-    def "Test garbage input"() {
-
-        setup:
-        String[] botInputs = new String[3]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot_input_garbage.txt"
-        botInputs[1] = "./test/resources/bot2_input_overflow.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-    }
-
-    //@Ignore
-    def "Test board full"() {
-
-        setup:
-        String[] botInputs = new String[3]
-
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input_boardfull.txt"
-        botInputs[1] = "./test/resources/bot2_input_boardfull.txt"
-
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
-
-        expect:
-        engine.finalState instanceof ConnectfourState;
-        engine.getProcessor().getWinner() == null;
     }
 }

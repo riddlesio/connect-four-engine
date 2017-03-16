@@ -75,6 +75,7 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
 
         ConnectfourMoveDeserializer deserializer = new ConnectfourMoveDeserializer();
         ConnectfourMove move = deserializer.traverse(input.getValue());
+        playerState.setMove(move);
         if (move.getException() != null) {
             //System.out.println("EXCEPTION '" + input.getValue() + "' " + move.getException().toString());
         }
@@ -84,7 +85,7 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
             //LOGGER.info(String.format("Unknown response: %s", input.getValue()));
         }
         nextState.setPlayerstates((ArrayList)nextPlayerStates);
-
+nextState.getBoard().dump();
         return nextState;
     }
 

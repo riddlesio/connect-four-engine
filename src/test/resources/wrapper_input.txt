@@ -1,5 +1,5 @@
 initialize
-configuration {"maxRounds":{"type":"integer","value":50},"fieldWidth":{"type":"integer","value":7},"fieldHeight":{"type":"integer","value":6},}}
+configuration {"maxRounds":{"type":"integer","value":50},"field_width":{"type":"integer","value":7},"field_height":{"type":"integer","value":6},}}
 bot_ids 0,1
 start
 details
