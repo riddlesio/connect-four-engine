@@ -64,7 +64,6 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
      */
     @Override
     public ConnectfourState createNextStateFromResponse(ConnectfourState state, PlayerResponse input, int roundNumber) {
-        System.out.println(input.getPlayerId() + " player " + roundNumber);
 
         /* Clone playerStates for next State */
         ArrayList<ConnectfourPlayerState> nextPlayerStates = clonePlayerStates(state.getPlayerStates());
