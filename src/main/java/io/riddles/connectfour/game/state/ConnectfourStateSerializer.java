@@ -50,26 +50,25 @@ public class ConnectfourStateSerializer extends AbstractStateSerializer<Connectf
         JSONObject stateJSON = new JSONObject();
         Board board = state.getBoard();
 
-        stateJSON.put("round", state.getRoundNumber() + 1);
+        ConnectfourPlayerState playerState = state.getPlayerStateById(state.getPlayerId());
         stateJSON.put("field", state.getBoard().toString());
-        JSONArray playersJSON = new JSONArray();
-        ArrayList<ConnectfourPlayerState> players = state.getPlayerStates();
-        for (ConnectfourPlayerState p : players) {
-            JSONObject playerObj = new JSONObject();
-            playersJSON.put(playerObj);
-        }
-        stateJSON.put("players", playersJSON);
-        ConnectfourMove move = state.getPlayerStateById(state.getPlayerId()).getMove();
-        String moveString = "";
+        stateJSON.put("player", state.getPlayerId());
+        if (playerState.getMove() != null)
+            stateJSON.put("column", playerState.getMove().getColumn());
+        else
+            stateJSON.put("column", JSONObject.NULL);
+        String winnerString = "";
+        if (!state.hasNextState()) winnerString = state.getWinnerString();
+        stateJSON.put("winner", winnerString);
+        stateJSON.put("round", state.getRoundNumber());
+
+        ConnectfourMove move = playerState.getMove();
         String exceptionString = "";
         if (move != null) {
-            moveString = move.toString();
             if (move.getException() != null)
-                exceptionString = move.getException().toString();
+                exceptionString = move.getException().getMessage();
         }
-        stateJSON.put("action", moveString);
         stateJSON.put("illegalMove", exceptionString);
-        stateJSON.put("player", state.getPlayerId());
 
         return stateJSON;
     }

@@ -47,8 +47,7 @@ class ConnectfourEngineSpec extends Specification {
     }
 
     //@Ignore
-    def "test a standard game"() {
-        println("test a standard game")
+    def "test a standard game with winner 0"() {
 
         setup:
         String[] botInputs = new String[2]
@@ -64,18 +63,269 @@ class ConnectfourEngineSpec extends Specification {
 
         def engine = new TestEngine(playerProvider, wrapperInput)
 
-        AbstractState state = engine.willRun()
-        state = engine.run(state);
-        /* Fast forward to final state */
-        while (state.hasNextState()) state = state.getNextState();
-
-        state.getBoard().dumpBoard();
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
         ConnectfourProcessor processor = engine.getProcessor();
 
         expect:
-        state instanceof ConnectfourState;
-        state.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,1,1,1,1,1,1,1,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,0,0,0,0,0,0,0,.,.,.,.,.,.,.,.,.,.,1,.,0,0,0,0,0,0,0,.,.,.,.,.,.,.,.,.,.,1,.,0,0,0,0,0,0,0,.,.,.,.,.,.,.,.,.,0,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.";
-        processor.getWinnerId(state) == null;
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,0,.,.,.,.,.,.,1,.,.,.,.,.,.,0,1,.,.,.,.,.,1,0,1,.,.,.,1,1,0,0,.,.,.,0,1,0,0,0,.,.";
+        processor.getWinnerId(finalState) == 0;
 
+    }
+
+    //@Ignore
+    def "test a standard game with winner 3"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input.txt"
+        botInputs[1] = "./src/test/resources/bot2_input.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(3);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(6);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,3,.,.,.,.,.,.,6,.,.,.,.,.,.,3,6,.,.,.,.,.,6,3,6,.,.,.,6,6,3,3,.,.,.,3,6,3,3,3,.,.";
+        processor.getWinnerId(finalState) == 3;
+
+    }
+
+    //@Ignore
+    def "cdia p1 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_cdia_p1win.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_cdia_p1win.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(3);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(6);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,3,.,.,.,.,.,.,3,3,.,.,.,.,.,6,6,3,.,.,.,.,3,6,6,3,6,.,.";
+        processor.getWinnerId(finalState) == 3;
+    }
+
+    //@Ignore
+    def "cdia p2 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_cdia_p2win.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_cdia_p2win.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(3);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(6);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,6,.,.,.,.,.,.,6,6,.,.,.,.,.,3,3,6,.,3,.,.,6,3,3,6,3,.,.";
+        processor.getWinnerId(finalState) == 6;
+    }
+
+    //@Ignore
+    def "hor p1 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_hor_p1win.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_hor_p1win.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(1);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(2);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,2,.,.,1,1,1,1,2,2";
+        processor.getWinnerId(finalState) == 1;
+    }
+
+    //@Ignore
+    def "hor p2 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_hor_p2win.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_hor_p2win.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,0,.,.,.,0,.,.,1,1,1,1,0,0";
+        processor.getWinnerId(finalState) == 1;
+    }
+
+    //@Ignore
+    def "draw"() {
+        println("draw")
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_boardfull.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_boardfull.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == "0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,0,1,1,0,0,1,1,1,0,0,1,1,0";
+        processor.getWinnerId(finalState) == null;
+    }
+
+    //@Ignore
+    def "ver p1 win"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_ver_p1win.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_ver_p1win.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(1);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(2);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,2,.,.,.,.,.,.,1,1,.,.,.,.,.,1,1,.,.,.,.,.,2,1,1,.,2,.,2,1,1,1,.,2,2,2,1,2,1,.,2,2";
+        processor.getWinnerId(finalState) == 1;
+    }
+
+    //@Ignore
+    def "ver p2 win ids 0 and 1"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_ver_p2win.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_ver_p2win.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,1,.,.,.,.,.,.,0,.,.,.,.,.,.,0,.,.,.,1,0,.,1,0,0,.,1,1,1,0,0,0,.,1,0,1,0,1,0,.,1,1";
+        processor.getWinnerId(finalState) == 1;
+    }
+
+    //@Ignore
+    def "garbage and out of bounds"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot_input_garbage.txt"
+        botInputs[1] = "./src/test/resources/bot2_input_ver_p2win.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,0,.,.,.,.,.,.,0,.,1,.,.,.,.,0,.,1,1,1,1,1,0,.,1,1";
+        processor.getWinnerId(finalState) == 0;
     }
 }

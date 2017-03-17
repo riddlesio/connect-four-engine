@@ -1,8 +1,8 @@
 place_disc a
 place_disc garbage
 garbage
-place_disc 3
-place_disc 3
+place_disc -1
+place_disc 9
 place_disc 3
 place_disc 3
 place_disc 3

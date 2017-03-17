@@ -64,6 +64,7 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
      */
     @Override
     public ConnectfourState createNextStateFromResponse(ConnectfourState state, PlayerResponse input, int roundNumber) {
+        System.out.println(input.getPlayerId() + " player " + roundNumber);
 
         /* Clone playerStates for next State */
         ArrayList<ConnectfourPlayerState> nextPlayerStates = clonePlayerStates(state.getPlayerStates());
@@ -85,7 +86,9 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
             //LOGGER.info(String.format("Unknown response: %s", input.getValue()));
         }
         nextState.setPlayerstates((ArrayList)nextPlayerStates);
-nextState.getBoard().dump();
+        String winnerString = "none";
+        if (getWinnerId(nextState) != null) winnerString = String.valueOf(getWinnerId(nextState));
+        nextState.setWinnerString(winnerString);
         return nextState;
     }
 
@@ -116,6 +119,7 @@ nextState.getBoard().dump();
 
         boolean returnVal = false;
         if (state.getBoard().getNrAvailableFields() == 0) returnVal = true;
+        if (getWinnerId(state) != null) returnVal = true;
 
         return returnVal;
     }
@@ -123,7 +127,9 @@ nextState.getBoard().dump();
     /* Returns winner playerId, or null if there's no winner. */
     @Override
     public Integer getWinnerId(ConnectfourState state) {
-        return logic.getWinner(state.getBoard(), 4);
+        String w = logic.getWinner(state.getBoard(), 4);
+        if (w == null) return null;
+        return Integer.parseInt(w);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ConnectfourState extends AbstractState<ConnectfourPlayerState> {
 
     private Board board;
     private int playerId;
-
+    private String winnerString;
 
     public ConnectfourState(ConnectfourState previousState, ArrayList<ConnectfourPlayerState> playerStates, int roundNumber) {
         super(previousState, playerStates, roundNumber);
@@ -47,7 +47,7 @@ public class ConnectfourState extends AbstractState<ConnectfourPlayerState> {
             this.board = new Board(b.getWidth(), b.getHeight(), b.toString());
             this.playerId = previousState.getPlayerId();
         } else
-            this.board = new Board(ConnectfourEngine.configuration.getInt("field_width"), ConnectfourEngine.configuration.getInt("field_height"));
+            this.board = new Board(ConnectfourEngine.configuration.getInt("fieldWidth"), ConnectfourEngine.configuration.getInt("fieldHeight"));
     }
 
     public Board getBoard() {
@@ -61,5 +61,10 @@ public class ConnectfourState extends AbstractState<ConnectfourPlayerState> {
     public int getPlayerId() { return this.playerId; }
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
+    }
+
+    public String getWinnerString() { return this.winnerString; }
+    public void setWinnerString(String winner) {
+        this.winnerString = winner;
     }
 }

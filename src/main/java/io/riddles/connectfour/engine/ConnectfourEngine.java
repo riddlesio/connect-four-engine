@@ -2,6 +2,7 @@ package io.riddles.connectfour.engine;
 
 import io.riddles.connectfour.game.ConnectfourSerializer;
 import io.riddles.connectfour.game.board.Board;
+import io.riddles.connectfour.game.move.ConnectfourMove;
 import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.connectfour.game.processor.ConnectfourProcessor;
 import io.riddles.connectfour.game.state.ConnectfourPlayerState;
@@ -15,6 +16,8 @@ import io.riddles.javainterface.game.player.PlayerProvider;
 import io.riddles.javainterface.io.IOHandler;
 
 import java.util.ArrayList;
+
+import static io.riddles.connectfour.game.move.MoveType.PLACEDISC;
 
 /**
  * ConnectfourEngine:
@@ -90,10 +93,12 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
         ArrayList<ConnectfourPlayerState> playerStates = new ArrayList<>();
 
         for (ConnectfourPlayer player : this.playerProvider.getPlayers()) {
-            ConnectfourPlayerState goPlayerState = new ConnectfourPlayerState(player.getId());
-            playerStates.add(goPlayerState);
+            ConnectfourPlayerState playerState = new ConnectfourPlayerState(player.getId());
+            playerState.setMove(new ConnectfourMove(PLACEDISC, 0));
+            playerStates.add(playerState);
         }
         ConnectfourState s = new ConnectfourState(null, playerStates, 0);
+        s.setPlayerId(playerProvider.getPlayers().get(0).getId());
         s.setBoard(new Board(configuration.getInt("fieldWidth"), configuration.getInt("fieldHeight")));
         return s;
     }

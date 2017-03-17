@@ -53,7 +53,7 @@ public class ConnectfourLogic {
         if (c < board.getWidth() && c  >= 0) { /* Move within range */
             for (int y = board.getHeight()-1; y >= 0; y--) { // From bottom column up
                 Point tmpC = new Point(c,y);
-                if (board.getFieldAt(tmpC).equals("0")) {
+                if (board.getFieldAt(tmpC).equals(board.EMPTY_FIELD)) {
                     board.setFieldAt(tmpC, String.valueOf(pId));
                     return;
                 }
@@ -68,18 +68,18 @@ public class ConnectfourLogic {
     /**
      * Checks if there is a winner, if so, returns player id.
      * @param args :
-     * @return : Returns player id if there is a winner, otherwise returns 0.
+     * @return : Returns player id if there is a winner, otherwise returns null.
      */
-    public Integer getWinner(Board b, int inARow) {
+    public String getWinner(Board b, int inARow) {
         /* Check for horizontal wins */
         for (int x = 0; x < b.getWidth(); x++) {
             for (int y = 0; y < b.getHeight(); y++) {
-                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                String c = b.getFieldAt(new Point(x,y));
                 Boolean win = true;
-                if (n != 0) {
+                if (!c.equals(Board.EMPTY_FIELD)) {
                     for (int i = 0; i < inARow; i++) {
                         if (x + i < b.getWidth()) {
-                            if (n != Integer.parseInt(b.getFieldAt(new Point(x + i, y)))) {
+                            if (!c.equals(b.getFieldAt(new Point(x + i, y)))) {
                                 win = false;
                             }
                         } else {
@@ -87,7 +87,7 @@ public class ConnectfourLogic {
                         }
                     }
                     if (win) {
-                        return n;
+                        return c;
                     }
                 }
             }
@@ -96,12 +96,12 @@ public class ConnectfourLogic {
         /* Check for vertical wins */
         for (int x = 0; x < b.getWidth(); x++) {
             for (int y = 0; y < b.getHeight(); y++) {
-                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                String c = b.getFieldAt(new Point(x,y));
                 Boolean win = true;
-                if (n != 0) {
+                if (!c.equals(Board.EMPTY_FIELD)) {
                     for (int i = 0; i < inARow; i++) {
                         if (y + i < b.getHeight()) {
-                            if (n != Integer.parseInt(b.getFieldAt(new Point(x, y + i)))) {
+                            if (!c.equals(b.getFieldAt(new Point(x, y + i)))) {
                                 win = false;
                             }
                         } else {
@@ -109,7 +109,7 @@ public class ConnectfourLogic {
                         }
                     }
                     if (win) {
-                        return n;
+                        return c;
                     }
                 }
             }
@@ -118,12 +118,12 @@ public class ConnectfourLogic {
         /* Check for diagonal wins */
         for (int x = 0; x < b.getWidth(); x++) {
             for (int y = 0; y < b.getHeight(); y++) {
-                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                String c = b.getFieldAt(new Point(x,y));
                 Boolean win = true;
-                if (n != 0) {
+                if (!c.equals(Board.EMPTY_FIELD)) {
                     for (int i = 0; i < inARow; i++) {
                         if (x - i >= 0 && y + i < b.getHeight()) {
-                            if (n != Integer.parseInt(b.getFieldAt(new Point(x - i, y + i)))) {
+                            if (!c.equals(b.getFieldAt(new Point(x - i, y + i)))) {
                                 win = false;
                             }
                         } else {
@@ -131,7 +131,7 @@ public class ConnectfourLogic {
                         }
                     }
                     if (win) {
-                        return n;
+                        return c;
                     }
                 }
             }
@@ -139,12 +139,12 @@ public class ConnectfourLogic {
         /* Check for anti diagonal wins */
         for (int x = 0; x < b.getWidth(); x++) {
             for (int y = 0; y < b.getHeight(); y++) {
-                int n = Integer.parseInt(b.getFieldAt(new Point(x,y)));
+                String c = b.getFieldAt(new Point(x,y));
                 Boolean win = true;
-                if (n != 0) {
+                if (!c.equals(Board.EMPTY_FIELD)) {
                     for (int i = 0; i < inARow; i++) {
                         if (x + i < b.getWidth() && y + i < b.getHeight()) {
-                            if (n != Integer.parseInt(b.getFieldAt(new Point(x + i, y + i)))) {
+                            if (!c.equals(b.getFieldAt(new Point(x + i, y + i)))) {
                                 win = false;
                             }
                         } else {
@@ -152,7 +152,7 @@ public class ConnectfourLogic {
                         }
                     }
                     if (win) {
-                        return n;
+                        return c;
                     }
                 }
             }

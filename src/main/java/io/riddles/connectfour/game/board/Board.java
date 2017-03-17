@@ -14,7 +14,7 @@ public class Board {
     protected String[][] field;
     protected int width = 20;
     protected int height = 11;
-    public static final String EMPTY_FIELD = "0";
+    public static final String EMPTY_FIELD = ".";
 
 
     public Board(int width, int height) {
