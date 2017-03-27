@@ -1,5 +1,0 @@
-place_disc 2
-place_disc 1
-place_disc 1
-place_disc 0
-place_disc 4
