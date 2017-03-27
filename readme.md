@@ -1,5 +1,5 @@
 # Connect Four
-This repository contains Connect Four for the Riddles.io platform and TheAIGames.com.
+This repository contains Connect Four for the Riddles.io platform.
 
 ## Setting up
 
