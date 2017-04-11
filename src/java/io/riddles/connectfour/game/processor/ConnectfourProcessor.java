@@ -97,6 +97,13 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
         return null;
     }
 
+    private ConnectfourPlayerState getOpponentPlayerState(ArrayList<ConnectfourPlayerState> playerStates, int id) {
+        for (ConnectfourPlayerState playerState : playerStates) {
+            if (playerState.getPlayerId() != id) { return playerState; }
+        }
+        return null;
+    }
+
     private ArrayList<ConnectfourPlayerState> clonePlayerStates(ArrayList<ConnectfourPlayerState> playerStates) {
         ArrayList<ConnectfourPlayerState> nextPlayerStates = new ArrayList<>();
         for (ConnectfourPlayerState playerState : playerStates) {
@@ -125,6 +132,17 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
     /* Returns winner playerId, or null if there's no winner. */
     @Override
     public Integer getWinnerId(ConnectfourState state) {
+
+        /* Opponent wins on error */
+        for (ConnectfourPlayerState playerState : state.getPlayerStates()) {
+            if (playerState.getMove()!= null && playerState.getMove().getException() != null) {
+                ConnectfourPlayerState opponentPlayerState = getOpponentPlayerState(state.getPlayerStates(), playerState.getPlayerId());
+                if (opponentPlayerState != null)
+                    return opponentPlayerState.getPlayerId();
+            }
+        }
+
+        /* Check for a winner on board */
         String w = logic.getWinner(state.getBoard(), 4);
         if (w == null) return null;
         return Integer.parseInt(w);

@@ -51,9 +51,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input.txt"
-        botInputs[1] = "./src/test/resources/bot2_input.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input.txt"
+        botInputs[1] = "./test/resources/bot2_input.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(0);
@@ -70,7 +70,7 @@ class ConnectfourEngineSpec extends Specification {
 
         expect:
         finalState instanceof ConnectfourState;
-        finalState.getBoard().toString() == ".,0,.,.,.,.,.,.,1,.,.,.,.,.,.,0,1,.,.,.,.,.,1,0,1,.,.,.,1,1,0,0,.,.,.,0,1,0,0,0,.,.";
+        finalState.getBoard().toString() == ".,0,.,.,.,.,.,.,1,.,.,.,.,.,.,0,.,.,.,.,.,.,1,.,.,.,.,.,1,1,0,.,.,.,.,0,1,0,0,.,.,.";
         processor.getWinnerId(finalState) == 0;
 
     }
@@ -80,9 +80,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input.txt"
-        botInputs[1] = "./src/test/resources/bot2_input.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input.txt"
+        botInputs[1] = "./test/resources/bot2_input.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(3);
@@ -99,7 +99,7 @@ class ConnectfourEngineSpec extends Specification {
 
         expect:
         finalState instanceof ConnectfourState;
-        finalState.getBoard().toString() == ".,3,.,.,.,.,.,.,6,.,.,.,.,.,.,3,6,.,.,.,.,.,6,3,6,.,.,.,6,6,3,3,.,.,.,3,6,3,3,3,.,.";
+        finalState.getBoard().toString() == ".,3,.,.,.,.,.,.,6,.,.,.,.,.,.,3,.,.,.,.,.,.,6,.,.,.,.,.,6,6,3,.,.,.,.,3,6,3,3,.,.,.";
         processor.getWinnerId(finalState) == 3;
 
     }
@@ -109,9 +109,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input_cdia_p1win.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_cdia_p1win.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_cdia_p1win.txt"
+        botInputs[1] = "./test/resources/bot2_input_cdia_p1win.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(3);
@@ -137,9 +137,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input_cdia_p2win.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_cdia_p2win.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_cdia_p2win.txt"
+        botInputs[1] = "./test/resources/bot2_input_cdia_p2win.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(3);
@@ -165,9 +165,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input_hor_p1win.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_hor_p1win.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_hor_p1win.txt"
+        botInputs[1] = "./test/resources/bot2_input_hor_p1win.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(1);
@@ -193,9 +193,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input_hor_p2win.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_hor_p2win.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_hor_p2win.txt"
+        botInputs[1] = "./test/resources/bot2_input_hor_p2win.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(0);
@@ -222,9 +222,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input_boardfull.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_boardfull.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_boardfull.txt"
+        botInputs[1] = "./test/resources/bot2_input_boardfull.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(0);
@@ -250,9 +250,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input_ver_p1win.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_ver_p1win.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_ver_p1win.txt"
+        botInputs[1] = "./test/resources/bot2_input_ver_p1win.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(1);
@@ -278,9 +278,9 @@ class ConnectfourEngineSpec extends Specification {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot1_input_ver_p2win.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_ver_p2win.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input_ver_p2win.txt"
+        botInputs[1] = "./test/resources/bot2_input_ver_p2win.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(0);
@@ -302,13 +302,13 @@ class ConnectfourEngineSpec extends Specification {
     }
 
     //@Ignore
-    def "garbage and out of bounds"() {
+    def "garbage and out of bounds player 1 wins"() {
 
         setup:
         String[] botInputs = new String[2]
-        def wrapperInput = "./src/test/resources/wrapper_input.txt"
-        botInputs[0] = "./src/test/resources/bot_input_garbage.txt"
-        botInputs[1] = "./src/test/resources/bot2_input_ver_p2win.txt"
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot_input_garbage.txt"
+        botInputs[1] = "./test/resources/bot2_input_ver_p2win.txt"
 
         PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
         ConnectfourPlayer player1 = new ConnectfourPlayer(0);
@@ -325,7 +325,35 @@ class ConnectfourEngineSpec extends Specification {
 
         expect:
         finalState instanceof ConnectfourState;
-        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,0,.,.,.,.,.,.,0,.,1,.,.,.,.,0,.,1,1,1,1,1,0,.,1,1";
+        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,1,0,.,.,.";
+        processor.getWinnerId(finalState) == 1;
+    }
+
+    //@Ignore
+    def "garbage and out of bounds player 0 wins"() {
+
+        setup:
+        String[] botInputs = new String[2]
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot2_input_ver_p2win.txt"
+        botInputs[1] = "./test/resources/bot_input_garbage.txt"
+
+        PlayerProvider<ConnectfourPlayer> playerProvider = new PlayerProvider<>();
+        ConnectfourPlayer player1 = new ConnectfourPlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        ConnectfourPlayer player2 = new ConnectfourPlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        ConnectfourProcessor processor = engine.getProcessor();
+
+        expect:
+        finalState instanceof ConnectfourState;
+        finalState.getBoard().toString() == ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,0,1,.,0,.";
         processor.getWinnerId(finalState) == 0;
     }
 }
