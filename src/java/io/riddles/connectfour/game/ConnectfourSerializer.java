@@ -19,11 +19,9 @@
 
 package io.riddles.connectfour.game;
 
-import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.connectfour.game.processor.ConnectfourProcessor;
 import io.riddles.connectfour.game.state.ConnectfourState;
 import io.riddles.connectfour.game.state.ConnectfourStateSerializer;
-import io.riddles.javainterface.game.player.AbstractPlayer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -33,10 +33,8 @@ import io.riddles.javainterface.game.state.AbstractStateDeserializer;
  *
  * @author jim
  */
-public class ConnectfourDeserializer extends
-        AbstractStateDeserializer<ConnectfourPlayer, ConnectfourState> {
+public class ConnectfourDeserializer extends AbstractStateDeserializer<ConnectfourPlayer, ConnectfourState> {
 
-    /* Constructor */
     public ConnectfourDeserializer(ArrayList<ConnectfourPlayer> players) {
         super(players);
     }
@@ -62,10 +60,8 @@ public class ConnectfourDeserializer extends
         return state;
     }
 
-    private ConnectfourState visitState(JSONObject stateJson,
-                                        ConnectfourState previousState) throws JSONException {
+    private ConnectfourState visitState(JSONObject stateJson, ConnectfourState previousState) throws JSONException {
         int roundNumber = stateJson.getInt("round");
         return null;
     }
-
 }

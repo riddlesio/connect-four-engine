@@ -20,9 +20,7 @@
 package io.riddles.connectfour;
 
 import io.riddles.connectfour.engine.ConnectfourEngine;
-import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.connectfour.game.state.ConnectfourState;
-import io.riddles.javainterface.exception.TerminalException;
 import io.riddles.javainterface.game.player.PlayerProvider;
 import io.riddles.javainterface.io.IOHandler;
 
@@ -36,7 +34,7 @@ public class Connectfour {
 
     public static void main(String[] args) throws Exception {
         ConnectfourEngine engine;
-        engine = new ConnectfourEngine(new PlayerProvider<ConnectfourPlayer>(), new IOHandler());
+        engine = new ConnectfourEngine(new PlayerProvider<>(), new IOHandler());
 
         ConnectfourState initialState = engine.willRun();
         ConnectfourState finalState = engine.run(initialState);

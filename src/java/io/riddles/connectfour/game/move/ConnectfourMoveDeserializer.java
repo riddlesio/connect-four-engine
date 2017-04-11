@@ -19,7 +19,6 @@
 
 package io.riddles.connectfour.game.move;
 
-import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.javainterface.exception.InvalidInputException;
 import io.riddles.javainterface.serialize.Deserializer;
 

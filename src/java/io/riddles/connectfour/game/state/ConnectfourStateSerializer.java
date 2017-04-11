@@ -22,10 +22,8 @@ package io.riddles.connectfour.game.state;
 import io.riddles.connectfour.game.board.Board;
 import io.riddles.connectfour.game.move.ConnectfourMove;
 import io.riddles.javainterface.game.state.AbstractStateSerializer;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 
 /**
  * io.riddles.go.game.state.GoStateSerializer - Created on 6/27/16
@@ -48,25 +46,28 @@ public class ConnectfourStateSerializer extends AbstractStateSerializer<Connectf
 
     private JSONObject visitState(ConnectfourState state) throws NullPointerException {
         JSONObject stateJSON = new JSONObject();
-        Board board = state.getBoard();
 
         ConnectfourPlayerState playerState = state.getPlayerStateById(state.getPlayerId());
         stateJSON.put("field", state.getBoard().toString());
         stateJSON.put("player", state.getPlayerId());
-        if (playerState.getMove() != null)
+
+        if (playerState.getMove() != null) {
             stateJSON.put("column", playerState.getMove().getColumn());
-        else
+        } else {
             stateJSON.put("column", JSONObject.NULL);
+        }
+
         String winnerString = "";
-        if (!state.hasNextState()) winnerString = state.getWinnerString();
+        if (!state.hasNextState()) {
+            winnerString = state.getWinnerString();
+        }
         stateJSON.put("winner", winnerString);
         stateJSON.put("round", state.getRoundNumber());
 
         ConnectfourMove move = playerState.getMove();
         String exceptionString = "";
-        if (move != null) {
-            if (move.getException() != null)
-                exceptionString = move.getException().getMessage();
+        if (move != null && move.getException() != null) {
+            exceptionString = move.getException().getMessage();
         }
         stateJSON.put("illegalMove", exceptionString);
 

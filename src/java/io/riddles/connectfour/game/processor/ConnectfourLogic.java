@@ -1,3 +1,22 @@
+/*
+ * Copyright 2016 riddles.io (developers@riddles.io)
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ *
+ *     For the full copyright and license information, please view the LICENSE
+ *     file that was distributed with this source code.
+ */
+
 package io.riddles.connectfour.game.processor;
 
 import io.riddles.connectfour.game.board.Board;
@@ -9,24 +28,9 @@ import io.riddles.connectfour.game.move.ConnectfourMove;
 
 import java.awt.*;
 
-/**
- * Created by joost on 3-7-16.
- */
+
 public class ConnectfourLogic {
 
-
-    public ConnectfourLogic() {
-    }
-
-    /**
-     * Takes a ConnectfourState and transforms it with a ConnectfourMove.
-     *
-     * Return
-     * Returns nothing, but transforms the given ConnectfourState.
-     * @param state The initial ConnectfourState
-     * @param playerState The ConnectfourPlayerState of the player
-     * @return
-     */
     public void transform(ConnectfourState state, ConnectfourPlayerState playerState) throws InvalidInputException {
         ConnectfourMove move = playerState.getMove();
 
@@ -35,15 +39,6 @@ public class ConnectfourLogic {
         }
     }
 
-    /**
-     * Takes a ConnectfourState and applies the move.
-     *
-     * Return
-     * Returns nothing, but transforms the given ConnectfourState.
-     * @param ConnectfourState The initial state
-     * @param ConnectfourMove The move of the player
-     * @return
-     */
     private void transformMove(ConnectfourState state, ConnectfourMove move, int pId) {
         Board board = state.getBoard();
 
@@ -64,12 +59,6 @@ public class ConnectfourLogic {
         }
     }
 
-
-    /**
-     * Checks if there is a winner, if so, returns player id.
-     * @param args :
-     * @return : Returns player id if there is a winner, otherwise returns null.
-     */
     public String getWinner(Board b, int inARow) {
         /* Check for horizontal wins */
         for (int x = 0; x < b.getWidth(); x++) {

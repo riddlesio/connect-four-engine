@@ -21,13 +21,10 @@ package io.riddles.connectfour.game.processor;
 
 import java.util.ArrayList;
 
-import io.riddles.connectfour.engine.ConnectfourEngine;
-import io.riddles.connectfour.game.board.Board;
 import io.riddles.connectfour.game.player.ConnectfourPlayer;
 import io.riddles.connectfour.game.state.ConnectfourPlayerState;
 import io.riddles.javainterface.engine.AbstractEngine;
 import io.riddles.javainterface.game.player.PlayerProvider;
-import io.riddles.javainterface.game.processor.AbstractProcessor;
 import io.riddles.connectfour.game.move.*;
 import io.riddles.connectfour.game.state.ConnectfourState;
 import io.riddles.javainterface.game.processor.PlayerResponseProcessor;
@@ -53,7 +50,6 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
 
     }
 
-
     /**
      * Play one round of the game. It takes a ConnectfourState
      * Return
@@ -76,18 +72,21 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
         ConnectfourMoveDeserializer deserializer = new ConnectfourMoveDeserializer();
         ConnectfourMove move = deserializer.traverse(input.getValue());
         playerState.setMove(move);
-        if (move.getException() != null) {
-            //System.out.println("EXCEPTION '" + input.getValue() + "' " + move.getException().toString());
-        }
+
         try {
             logic.transform(nextState, playerState);
         } catch (Exception e) {
             //LOGGER.info(String.format("Unknown response: %s", input.getValue()));
         }
-        nextState.setPlayerstates((ArrayList)nextPlayerStates);
+
+        nextState.setPlayerstates(nextPlayerStates);
         String winnerString = "none";
-        if (getWinnerId(nextState) != null) winnerString = String.valueOf(getWinnerId(nextState));
+        if (getWinnerId(nextState) != null) {
+            winnerString = String.valueOf(getWinnerId(nextState));
+        }
+
         nextState.setWinnerString(winnerString);
+
         return nextState;
     }
 
@@ -137,8 +136,6 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
         player.sendUpdate("field", state.getBoard().toString());
     }
 
-
-
     @Override
     public double getScore(ConnectfourState state) {
         return state.getRoundNumber();
@@ -148,7 +145,4 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
     public Enum getActionType(ConnectfourState goState, AbstractPlayerState playerState) {
         return ActionType.MOVE;
     }
-
-
-
 }
