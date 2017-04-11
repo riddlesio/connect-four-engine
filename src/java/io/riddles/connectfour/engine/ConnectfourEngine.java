@@ -54,27 +54,19 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
         super(playerProvider, ioHandler);
     }
 
-    /* createPlayer creates and initialises a Player for the game.
-     * returns: a Player
-     */
     @Override
     protected ConnectfourPlayer createPlayer(int id) {
-        ConnectfourPlayer p = new ConnectfourPlayer(id);
-        return p;
+        return new ConnectfourPlayer(id);
     }
 
     @Override
     protected Configuration getDefaultConfiguration() {
         Configuration cc = new Configuration();
-        cc.put("maxRounds", 10);
         cc.put("fieldWidth", 7);
         cc.put("fieldHeight", 6);
         return cc;
     }
 
-    /* createProcessor creates and initialises a Processor for the game.
-     * returns: a Processor
-     */
     @Override
     protected ConnectfourProcessor createProcessor() {
         return new ConnectfourProcessor(playerProvider);
@@ -90,21 +82,14 @@ public class ConnectfourEngine extends AbstractEngine<ConnectfourProcessor, Conn
         player.sendSetting("your_botid", player.getId());
         player.sendSetting("field_width", configuration.getInt("fieldWidth"));
         player.sendSetting("field_height", configuration.getInt("fieldHeight"));
-        player.sendSetting("max_rounds", configuration.getInt("maxRounds"));
     }
 
-    /* getPlayedGame creates a serializer and serialises the game
-     * returns: String with the serialised game.
-     */
     @Override
     protected String getPlayedGame(ConnectfourState initialState) {
         ConnectfourSerializer serializer = new ConnectfourSerializer();
         return serializer.traverseToString(this.processor, initialState);
     }
 
-    /* getInitialState creates an initial state to start the game with.
-     * returns: ConnectfourState
-     */
     @Override
     protected ConnectfourState getInitialState() {
         ArrayList<ConnectfourPlayerState> playerStates = new ArrayList<>();

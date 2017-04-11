@@ -138,7 +138,7 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
 
     @Override
     public double getScore(ConnectfourState state) {
-        return state.getRoundNumber();
+        return state.getRoundNumber() - 1;
     }
 
     @Override
