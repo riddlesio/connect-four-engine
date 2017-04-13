@@ -80,12 +80,6 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
         }
 
         nextState.setPlayerstates(nextPlayerStates);
-        String winnerString = "none";
-        if (getWinnerId(nextState) != null) {
-            winnerString = String.valueOf(getWinnerId(nextState));
-        }
-
-        nextState.setWinnerString(winnerString);
 
         return nextState;
     }
@@ -120,13 +114,7 @@ public class ConnectfourProcessor extends PlayerResponseProcessor<ConnectfourSta
      */
     @Override
     public boolean hasGameEnded(ConnectfourState state) {
-        if (state.getRoundNumber() > AbstractEngine.configuration.getInt("maxRounds")) return true;
-
-        boolean returnVal = false;
-        if (state.getBoard().getNrAvailableFields() == 0) returnVal = true;
-        if (getWinnerId(state) != null) returnVal = true;
-
-        return returnVal;
+        return state.getBoard().getNrAvailableFields() == 0 || getWinnerId(state) != null;
     }
 
     /* Returns winner playerId, or null if there's no winner. */

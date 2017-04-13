@@ -38,7 +38,6 @@ public class ConnectfourState extends AbstractState<ConnectfourPlayerState> {
 
     private Board board;
     private int playerId;
-    private String winnerString;
 
     public ConnectfourState(ConnectfourState previousState, ArrayList<ConnectfourPlayerState> playerStates, int roundNumber) {
         super(previousState, playerStates, roundNumber);
@@ -67,13 +66,5 @@ public class ConnectfourState extends AbstractState<ConnectfourPlayerState> {
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
-    }
-
-    public String getWinnerString() {
-        return this.winnerString;
-    }
-
-    public void setWinnerString(String winner) {
-        this.winnerString = winner;
     }
 }

@@ -49,12 +49,24 @@ public class ConnectfourSerializer extends AbstractGameSerializer<ConnectfourPro
         ConnectfourStateSerializer serializer = new ConnectfourStateSerializer();
         JSONArray states = new JSONArray();
 
-        states.put(serializer.traverseToJson(initialState));
+        // DIRTY FIX BECAUSE OF THIS STUPID ASS TurnBasedGameLoop
+        JSONObject initialJsonState = serializer.traverseToJson(initialState);
+        initialJsonState.put("round", initialState.getRoundNumber() - 1);
+        states.put(initialJsonState);
 
         ConnectfourState state = initialState;
+        int counter = 0;
         while (state.hasNextState()) {
             state = (ConnectfourState) state.getNextState();
-            states.put(serializer.traverseToJson(state));
+            JSONObject jsonState = serializer.traverseToJson(state);
+
+            // DIRTY FIX BECAUSE OF THIS STUPID ASS TurnBasedGameLoop
+            if (counter % 2 == 1) {
+                jsonState.put("round", state.getRoundNumber() - 1);
+            }
+            counter++;
+
+            states.put(jsonState);
         }
 
         game.put("states", states);

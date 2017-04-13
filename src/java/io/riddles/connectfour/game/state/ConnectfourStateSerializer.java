@@ -56,12 +56,6 @@ public class ConnectfourStateSerializer extends AbstractStateSerializer<Connectf
         } else {
             stateJSON.put("column", JSONObject.NULL);
         }
-
-        String winnerString = "";
-        if (!state.hasNextState()) {
-            winnerString = state.getWinnerString();
-        }
-        stateJSON.put("winner", winnerString);
         stateJSON.put("round", state.getRoundNumber());
 
         ConnectfourMove move = playerState.getMove();
